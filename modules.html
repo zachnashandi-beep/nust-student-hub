@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () {
+            document.documentElement.classList.remove("loading");
+          });
+
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modules • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="modules-data.js"></script>
+    <script defer src="command-palette.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav-auth.js"></script>
+    <script defer src="personal-inject.js"></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+
+        <nav class="nav">
+          <a class="active" href="modules.html">Modules</a>
+          <a href="index.html?to=resources">Resources</a>
+          <a href="index.html?contact=1">Contact</a>
+
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+            🌙
+          </button>
+        </nav>
+      </header>
+
+      <main class="page" id="main">
+        <h1>Modules</h1>
+        <p class="subtitle">Pick a module to expand weeks, topics, and links.</p>
+
+        <div class="note continue-card" id="continueCard" hidden>
+          <strong>Last opened:</strong> <span id="continueLabel">—</span>
+          <a class="btn primary" id="continueBtn" href="#">Continue</a>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-year="y1" type="button">Year 1</button>
+          <button class="tab" data-year="y2" type="button">Year 2</button>
+          <button class="tab" data-year="y3" type="button">Year 3</button>
+        </div>
+
+        <div class="searchbar">
+          <input
+            id="moduleSearch"
+            type="search"
+            placeholder="Search modules, topics, weeks…"
+            autocomplete="off"
+          />
+          <span class="hint" id="resultsHint">Showing all</span>
+        </div>
+
+        <section class="card year active" data-year="y1">
+          <div class="note">
+            ⭐ Most used this week:
+            <ul>
+              <li><a href="#module-mci">MCI — Boolean Algebra</a></li>
+              <li><a href="#module-prg">PRG — OOP recap</a></li>
+            </ul>
+          </div>
+          <div id="modulesMountY1"></div>
+        </section>
+
+        <section class="card year" data-year="y2">
+          <p class="muted">Year 2 modules coming soon.</p>
+        </section>
+
+        <section class="card year" data-year="y3">
+          <p class="muted">Year 3 modules coming soon.</p>
+        </section>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">← <a href="index.html">Back to Home</a></p>
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <!-- Verification Modal -->
+    <dialog class="modal" id="authModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div>
+            <p class="modal-date">Verification</p>
+            <h3 class="modal-title">Verify Profile</h3>
+          </div>
+          <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+        </div>
+
+        <p class="modal-body">
+          Enter your username and access key to access personalized content.
+        </p>
+
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input
+            type="text"
+            id="authUsername"
+            placeholder="username"
+            autocomplete="username"
+            style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+          />
+        </div>
+
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+          <input
+            type="password"
+            id="authAccessKey"
+            placeholder="access key"
+            autocomplete="current-password"
+            style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+          />
+        </div>
+
+        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+
+        <div class="modal-actions">
+          <button class="btn primary" type="button" id="authSubmit">Verify</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      // ---------- Data-driven render (from modules-data.js) ----------
+      (function () {
+        const data = window.MODULES_DATA;
+        const checklistItems = window.MODULES_CHECKLIST_ITEMS || [
+          { cb: "playlist", label: "Watched playlist" },
+          { cb: "notes", label: "Read notes" },
+          { cb: "exercises", label: "Did exercises" },
+          { cb: "pastpaper", label: "Past paper attempted" },
+        ];
+        if (!data || !data.y1) return;
+
+        const mount = document.getElementById("modulesMountY1");
+        if (!mount) return;
+
+        data.y1.forEach((mod, index) => {
+          const details = document.createElement("details");
+          details.className = "dropdown";
+          details.id = "module-" + mod.id;
+          details.dataset.moduleId = mod.id;
+          const titleMatch = mod.title.match(/\(([^)]+)\)\s*$/);
+          details.dataset.moduleTitle = titleMatch ? titleMatch[1] : (mod.title.trim() || mod.id);
+          if (index === 0) details.open = true;
+
+          const summary = document.createElement("summary");
+          summary.innerHTML =
+            "<span class=\"module-title\">" + escapeHtml(mod.title) + "</span>" +
+            "<span class=\"tag\">" + escapeHtml(mod.tag) + "</span>" +
+            (mod.meta ? "<span class=\"summary-meta\">" + escapeHtml(mod.meta) + "</span>" : "") +
+            (mod.chips && mod.chips.length ? "<span class=\"chips\">" + mod.chips.map(function (c) { return "<span class=\"chip\">" + escapeHtml(c) + "</span>"; }).join(" ") + "</span>" : "");
+          details.appendChild(summary);
+
+          const content = document.createElement("div");
+          content.className = "content";
+          const ul = document.createElement("ul");
+          ul.className = "links";
+          (mod.weeks || []).forEach(function (w) {
+            const li = document.createElement("li");
+            li.dataset.weekId = w.weekId;
+            const a = document.createElement("a");
+            a.href = w.href || "#";
+            a.textContent = w.label;
+            li.appendChild(a);
+            const checkWrap = document.createElement("div");
+            checkWrap.className = "week-checklist";
+            checklistItems.forEach(function (item) {
+              const label = document.createElement("label");
+              const cb = document.createElement("input");
+              cb.type = "checkbox";
+              cb.dataset.cb = item.cb;
+              label.appendChild(cb);
+              label.appendChild(document.createTextNode(" " + item.label));
+              checkWrap.appendChild(label);
+            });
+            li.appendChild(checkWrap);
+            ul.appendChild(li);
+          });
+          content.appendChild(ul);
+          details.appendChild(content);
+          mount.appendChild(details);
+        });
+
+        function escapeHtml(s) {
+          const div = document.createElement("div");
+          div.textContent = s;
+          return div.innerHTML;
+        }
+      })();
+
+      const search = document.getElementById("moduleSearch");
+      const hint = document.getElementById("resultsHint");
+
+      function normalize(s) {
+        return (s || "").toLowerCase().trim();
+      }
+
+      function filterModules() {
+        const activeYear = document.querySelector(".year.active");
+        const dropdowns = activeYear ? Array.from(activeYear.querySelectorAll(".dropdown")) : [];
+        const q = normalize(search.value);
+
+        let visibleCount = 0;
+
+        dropdowns.forEach((d) => {
+          const text = normalize(d.innerText);
+          const match = q === "" || text.includes(q);
+
+          d.style.display = match ? "" : "none";
+
+          if (match) {
+            visibleCount++;
+            if (q !== "") d.open = true;
+          }
+        });
+
+        if (q === "") {
+          hint.textContent = "Showing all";
+        } else {
+          hint.textContent = `Showing ${visibleCount} result${visibleCount === 1 ? "" : "s"}`;
+        }
+      }
+
+      search.addEventListener("input", filterModules);
+
+      const tabs = document.querySelectorAll(".tab");
+      const years = document.querySelectorAll(".year");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.classList.remove("active"));
+          years.forEach((y) => y.classList.remove("active"));
+
+          tab.classList.add("active");
+          document.querySelector(`.year[data-year="${tab.dataset.year}"]`)?.classList.add("active");
+
+          localStorage.setItem("activeYear", tab.dataset.year);
+
+          if (search) {
+            search.value = "";
+            hint.textContent = "Showing all";
+            filterModules();
+          }
+        });
+      });
+
+      const savedYear = localStorage.getItem("activeYear");
+      if (savedYear) {
+        document.querySelector(`.tab[data-year="${savedYear}"]`)?.click();
+      }
+
+      // ---------- Continue where you left off ----------
+      const CONTINUE_KEY = "studentHub_lastModule";
+      const card = document.getElementById("continueCard");
+      const label = document.getElementById("continueLabel");
+      const continueBtn = document.getElementById("continueBtn");
+
+      function saveLastOpened(moduleId, moduleTitle, linkText, href) {
+        try {
+          localStorage.setItem(CONTINUE_KEY, JSON.stringify({
+            moduleId,
+            moduleTitle: moduleTitle || moduleId,
+            linkText: linkText || "",
+            href: href || "#"
+          }));
+        } catch (e) {}
+      }
+
+      function showContinueCard() {
+        try {
+          const raw = localStorage.getItem(CONTINUE_KEY);
+          const data = raw ? JSON.parse(raw) : null;
+          if (!data || !data.moduleId) return;
+          label.textContent = data.moduleTitle + (data.linkText ? " → " + data.linkText : "");
+          continueBtn.href = "#" + (data.moduleId ? "module-" + data.moduleId : "");
+          card.hidden = false;
+        } catch (e) {}
+      }
+
+      showContinueCard();
+
+      continueBtn.addEventListener("click", (e) => {
+        const hash = continueBtn.getAttribute("href") || "";
+        const id = hash.replace("#", "");
+        if (id) {
+          const details = document.getElementById(id);
+          if (details) {
+            details.open = true;
+            details.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }
+      });
+
+      document.querySelectorAll(".dropdown").forEach((d) => {
+        d.addEventListener("toggle", () => {
+          if (d.open) {
+            const id = d.dataset.moduleId;
+            const title = d.dataset.moduleTitle || d.querySelector(".module-title")?.textContent?.trim() || id;
+            saveLastOpened(id, title, "", "#");
+            showContinueCard();
+          }
+        });
+      });
+
+      document.querySelectorAll(".links a").forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const li = a.closest("li");
+          const details = a.closest(".dropdown");
+          const moduleId = details?.dataset?.moduleId;
+          const moduleTitle = details?.dataset?.moduleTitle || details?.querySelector(".module-title")?.textContent?.trim();
+          const linkText = a.textContent.trim();
+          const href = a.getAttribute("href") || "#";
+          saveLastOpened(moduleId, moduleTitle, linkText, href);
+          showContinueCard();
+        });
+      });
+
+      // Open focused module from URL (#module-mci or ?focus=mci)
+      const hash = window.location.hash;
+      const focusParam = new URLSearchParams(window.location.search).get("focus");
+      const focusId = (hash && hash.startsWith("#module-")) ? hash.slice(1) : (focusParam ? "module-" + focusParam : null);
+      if (focusId) {
+        const details = document.getElementById(focusId);
+        if (details) {
+          details.open = true;
+          requestAnimationFrame(() => details.scrollIntoView({ behavior: "smooth", block: "start" }));
+        }
+      }
+
+      // ---------- Week checklists (localStorage) ----------
+      const CHECKLIST_KEY = "studentHub_weekChecklists";
+
+      function loadChecklists() {
+        try {
+          const raw = localStorage.getItem(CHECKLIST_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) { return {}; }
+        }
+
+      function saveChecklists(obj) {
+        try { localStorage.setItem(CHECKLIST_KEY, JSON.stringify(obj)); } catch (e) {}
+      }
+
+      const checklists = loadChecklists();
+
+      document.querySelectorAll(".week-checklist").forEach((wrap) => {
+        const weekId = wrap.closest("li")?.dataset?.weekId;
+        if (!weekId) return;
+        const state = checklists[weekId] || {};
+        wrap.querySelectorAll("input[type=checkbox]").forEach((cb) => {
+          const key = cb.dataset.cb;
+          if (state[key]) cb.checked = true;
+          cb.addEventListener("change", () => {
+            const st = loadChecklists();
+            if (!st[weekId]) st[weekId] = {};
+            st[weekId][key] = cb.checked;
+            saveChecklists(st);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

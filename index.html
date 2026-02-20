@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () {
+            document.documentElement.classList.remove("loading");
+          });
+
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="updates.js"></script>
+    <script defer src="anchor-highlight.js"></script>
+    <script defer src="active-section.js"></script>
+    <script defer src="deep-link.js"></script>
+    <script defer src="contact.js"></script>
+    <script defer src="modules-data.js"></script>
+    <script defer src="command-palette.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav-auth.js"></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="#resources">Resources</a>
+          <button class="nav-link" id="contactOpen" type="button">Contact</button>
+
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+            🌙
+          </button>
+        </nav>
+      </header>
+
+      <main class="hero" id="main">
+        <div class="hero-text">
+          <h1>Study smarter, not harder <span>📚</span></h1>
+          <p class="subtitle">
+            Notes, weekly breakdowns, and resources for MCI, PRG, DBF, DTN, and ISS.
+          </p>
+
+          <div class="buttons">
+            <a class="btn" href="modules.html">Go to Modules</a>
+            <a class="btn" href="#resources">Browse Resources</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <p class="small-title">Quick Start</p>
+          <ul class="quick">
+            <li>✅ Pick a module</li>
+            <li>✅ Open a week/topic</li>
+            <li>✅ Use links + summaries</li>
+          </ul>
+          <p class="muted">
+            (You'll add photos and real links later — this is just the structure.)
+          </p>
+        </div>
+      </main>
+
+      <section class="section" id="updates">
+        <div class="section-head">
+          <h2>Latest updates</h2>
+          <p class="muted">What's new for Computer Science students.</p>
+        </div>
+
+        <div class="updates card">
+          <button class="update-item" type="button"
+            data-update-id="mci-week4"
+            data-link="modules.html#module-mci"
+            data-title="MCI: Added Week 4 — Boolean Algebra & K-Maps"
+            data-date="Jan 30, 2026"
+            data-body="Added a clean breakdown of Boolean identities + quick K-map steps and common pitfalls. Includes mini practice questions.">
+            <span class="update-title">MCI: Week 4 — Boolean Algebra & K-Maps <span class="badge" data-badge>NEW</span></span>
+            <span class="update-meta">Jan 30, 2026 • Mathematics (MCI)</span>
+          </button>
+
+          <button class="update-item" type="button"
+            data-update-id="prg-oop-recap"
+            data-link="modules.html#module-prg"
+            data-title="PRG: New OOP recap + class examples"
+            data-date="Jan 29, 2026"
+            data-body="Added simple examples for classes/objects and method patterns. Good for test revision and lab prep.">
+            <span class="update-title">PRG: OOP recap + examples</span>
+            <span class="update-meta">Jan 29, 2026 • Programming II (PRG)</span>
+          </button>
+
+          <button class="update-item" type="button"
+            data-update-id="dtn-osi-tcpip"
+            data-link="modules.html#module-dtn"
+            data-title="DTN: OSI vs TCP/IP overview"
+            data-date="Jan 28, 2026"
+            data-body="Added an easy mapping table + quick notes for routing vs switching and why it matters.">
+            <span class="update-title">DTN: OSI vs TCP/IP</span>
+            <span class="update-meta">Jan 28, 2026 • Data Networks (DTN)</span>
+          </button>
+        </div>
+      </section>
+
+      <dialog class="modal" id="updateModal">
+        <div class="modal-inner">
+          <div class="modal-top">
+            <div>
+              <p class="modal-date" id="modalDate"></p>
+              <h3 class="modal-title" id="modalTitle"></h3>
+            </div>
+            <button class="modal-close" type="button" id="modalClose" aria-label="Close">✕</button>
+          </div>
+
+          <p class="modal-body" id="modalBody"></p>
+
+          <div class="modal-actions">
+            <a class="btn primary" id="modalOpenUpdate" href="modules.html">Go to Modules</a>
+            <button class="btn" type="button" id="modalOk">Close</button>
+          </div>
+        </div>
+      </dialog>
+
+      <dialog class="modal" id="contactModal">
+        <div class="modal-inner">
+          <div class="modal-top">
+            <div>
+              <p class="modal-date">Contact</p>
+              <h3 class="modal-title">Get in touch</h3>
+            </div>
+            <button class="modal-close" type="button" id="contactClose" aria-label="Close">✕</button>
+          </div>
+
+          <p class="modal-body">
+            Found a broken link, want to add past papers, or have a suggestion?
+          </p>
+
+          <div class="card" style="padding:12px; margin:12px 0;">
+            <p style="margin:0 0 6px;"><strong>Email</strong></p>
+            <a href="mailto:zachapp.team@gmail.com?subject=Student%20Hub%20Suggestion%20or%20Report" id="contactEmail">
+              zachapp.team@gmail.com
+            </a>
+            <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+          </div>
+
+          <p class="muted" style="margin:12px 0 0; text-align:center;">
+            Maintained by Zach<br />
+            <span style="font-size:0.9rem;">Student Hub Project</span>
+          </p>
+
+          <div class="modal-actions contact-actions">
+            <a class="btn primary" href="#" target="_blank" rel="noopener" id="suggestLink">Suggest a resource</a>
+            <a class="btn" href="#" target="_blank" rel="noopener" id="reportLink">Report broken link</a>
+            <a class="btn" href="#" target="_blank" rel="noopener" id="communityLink">Community (Discord)</a>
+          </div>
+        </div>
+      </dialog>
+
+      <!-- Verification Modal -->
+      <dialog class="modal" id="authModal">
+        <div class="modal-inner">
+          <div class="modal-top">
+            <div>
+              <p class="modal-date">Verification</p>
+              <h3 class="modal-title">Verify Profile</h3>
+            </div>
+            <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+          </div>
+
+          <p class="modal-body">
+            Enter your username and access key to access personalized content.
+          </p>
+
+          <div style="margin:12px 0;">
+            <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+            <input
+              type="text"
+              id="authUsername"
+              placeholder="username"
+              autocomplete="username"
+              style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+            />
+          </div>
+
+          <div style="margin:12px 0;">
+            <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+            <input
+              type="password"
+              id="authAccessKey"
+              placeholder="access key"
+              autocomplete="current-password"
+              style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+            />
+          </div>
+
+          <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+
+          <div class="modal-actions">
+            <button class="btn primary" type="button" id="authSubmit">Verify</button>
+          </div>
+        </div>
+      </dialog>
+
+      <section class="section" id="resources">
+        <h2>Featured Resources</h2>
+        <p class="muted">Past papers, playlists, community links, and lab setup.</p>
+
+        <div class="grid">
+          <a class="tile" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">
+            <div class="thumb placeholder"></div>
+            <h3>Past Papers</h3>
+            <p>Exam practice and solutions (Drive folder).</p>
+          </a>
+
+          <a class="tile" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+            <div class="thumb placeholder"></div>
+            <h3>YouTube Playlists</h3>
+            <p>Best videos per module — MCI, PRG, DBF, DTN.</p>
+          </a>
+
+          <a class="tile" href="https://discord.gg" target="_blank" rel="noopener noreferrer">
+            <div class="thumb placeholder"></div>
+            <h3>NUST CS Community</h3>
+            <p>Discord / WhatsApp — ask questions, share notes.</p>
+          </a>
+
+          <a class="tile" href="#" target="_blank" rel="noopener noreferrer">
+            <div class="thumb placeholder"></div>
+            <h3>Exam Timetable</h3>
+            <p>Important dates and exam schedule.</p>
+          </a>
+
+          <a class="tile" href="https://netbeans.apache.org" target="_blank" rel="noopener noreferrer">
+            <div class="thumb placeholder"></div>
+            <h3>Lab Tools</h3>
+            <p>NetBeans, Java JDK, MySQL Workbench setup.</p>
+          </a>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-grid">
+          <div>
+            <p class="footer-title">Student Hub</p>
+            <p class="muted">Built by Zach. Made for NUST students.</p>
+          </div>
+
+          <div>
+            <p class="footer-title">Pages</p>
+            <a href="index.html">Home</a><br />
+            <a href="modules.html">Modules</a>
+          </div>
+        </div>
+
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+        <p class="copyright">© <span id="year"></span> Student Hub</p>
+      </footer>
+    </div>
+
+    <script>
+      // tiny quality-of-life: auto year (optional)
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

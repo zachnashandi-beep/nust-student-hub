@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () {
+            document.documentElement.classList.remove("loading");
+          });
+
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="personal.js"></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="index.html?to=resources">Resources</a>
+          <a href="index.html?contact=1">Contact</a>
+          <a href="personal.html" class="active">Personal</a>
+
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+            🌙
+          </button>
+        </nav>
+      </header>
+
+      <main class="page" id="main">
+        <h1>Personal</h1>
+        <p class="subtitle">Your personalized dashboard and notes.</p>
+
+        <div id="personalEmptyState" hidden>
+          <div class="card" style="text-align:center; padding:40px 20px;">
+            <h2 style="margin:0 0 12px;">Verify your profile to access</h2>
+            <p class="muted" style="margin:0 0 20px;">
+              Enter your username and access key to view personalized content.
+            </p>
+            <button class="btn primary" onclick="window.openAuthModal?.()">Verify Profile</button>
+          </div>
+        </div>
+
+        <div id="personalMount"></div>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">← <a href="index.html">Back to Home</a></p>
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <!-- Verification Modal -->
+    <dialog class="modal" id="authModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div>
+            <p class="modal-date">Verification</p>
+            <h3 class="modal-title">Verify Profile</h3>
+          </div>
+          <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+        </div>
+
+        <p class="modal-body">
+          Enter your username and access key to access personalized content.
+        </p>
+
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input
+            type="text"
+            id="authUsername"
+            placeholder="username"
+            autocomplete="username"
+            style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+          />
+        </div>
+
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+          <input
+            type="password"
+            id="authAccessKey"
+            placeholder="access key"
+            autocomplete="current-password"
+            style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+          />
+        </div>
+
+        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+
+        <div class="modal-actions">
+          <button class="btn primary" type="button" id="authSubmit">Verify</button>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

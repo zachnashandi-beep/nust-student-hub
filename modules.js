@@ -1,0 +1,43 @@
+// modules.js – curriculum data (Bachelor of Computer Science in Cyber Security / Informatics)
+// Easy to expand: add links: { notes: "url", resources: "url", pastPapers: "url" }
+export const modulesData = {
+  "Year 1": [
+    { code: "PLU411S", name: "Programming and Logic", semester: 1, links: {} },
+    { code: "BSC410S", name: "Business Computing", semester: 1, links: {} },
+    { code: "BMC511S", name: "Business Mathematics for Computing", semester: 1, links: {} },
+    { code: "DBF510S", name: "Database Fundamentals", semester: 1, links: {} },
+    { code: "DST511S", name: "Design Thinking", semester: 1, links: {} },
+    { code: "ICG511S", name: "Introduction to Computing", semester: 1, links: {} },
+    { code: "MCI511S", name: "Mathematics for Computing and Informatics 1A", semester: 1, links: {} },
+    { code: "EPR511S", name: "Professional Practice", semester: 2, links: {} },
+    { code: "COA511S", name: "Computer Organisation and Architecture", semester: 2, links: {} },
+    { code: "DSA521S", name: "Data Structures and Algorithms 1", semester: 2, links: {} },
+    { code: "MCI521S", name: "Mathematics for Computing and Informatics 1B", semester: 2, links: {} },
+    { code: "PRG510S", name: "Programming 1", semester: 2, links: {} },
+    { code: "SAD622S", name: "Systems Analysis and Design", semester: 2, links: {} },
+  ],
+  "Year 2": [
+    { code: "EAP511S", name: "Academic and Professional Skills", semester: 3, links: {} },
+    { code: "ASP611S", name: "Applied Statistics and Probability", semester: 3, links: {} },
+    { code: "DTN611S", name: "Data Networks", semester: 3, links: {} },
+    { code: "ISS611S", name: "Information Systems Security Essentials", semester: 3, links: {} },
+    { code: "OPS611S", name: "Operating Systems", semester: 3, links: {} },
+    { code: "PRG621S", name: "Programming 2", semester: 3, links: {} },
+    { code: "CMN620S", name: "Communication Networks", semester: 4, links: {} },
+    { code: "CGF622S", name: "Computer Graphics", semester: 4, links: {} },
+    { code: "DFC622S", name: "Digital Forensics", semester: 4, links: {} },
+    { code: "EFC621S", name: "Ethics and Forensics", semester: 4, links: {} },
+    { code: "ICE712S", name: "Information and Computer Ethics", semester: 4, links: {} },
+    { code: "WAS621S", name: "Web and Application Security", semester: 4, links: {} },
+  ],
+  "Year 3": [
+    { code: "ADS711S", name: "Advanced Database Systems", semester: 5, links: {} },
+    { code: "HCI711S", name: "Human-Computer Interaction", semester: 5, links: {} },
+    { code: "IAR721S", name: "Information Architecture", semester: 5, links: {} },
+    { code: "MBF712S", name: "Management and Business Fundamentals", semester: 5, links: {} },
+    { code: "OSS711S", name: "Open Source Systems", semester: 5, links: {} },
+    { code: "WCS721S", name: "Work Integrated Learning (Cyber Security)", semester: 6, links: {} },
+    { code: "PTM721S", name: "Project Management", semester: 6, links: {} },
+    { code: "SYD611S", name: "Sustainability and Development", semester: 6, links: {} },
+  ],
+};
