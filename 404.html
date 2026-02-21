@@ -113,7 +113,8 @@
         }
       }
     </style>
-      <script defer src="nav-mobile.js"></script>
+      <script defer src="icons.js"></script>
+    <script defer src="nav-mobile.js"></script>
     <script defer src="back-to-top.js"></script>
   </head>
   <body>
@@ -125,14 +126,14 @@
           <a href="modules.html">Modules</a>
           <a href="guides.html">Guides</a>
           <a href="index.html?to=resources">Resources</a>
-          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme"><span data-icon="moon" data-icon-size="18"></span></button>
         </nav>
       </header>
 
       <main id="main">
         <div class="error-page">
           <p class="error-code" aria-hidden="true">404</p>
-          <div class="error-emoji" role="img" aria-label="Confused face">🤔</div>
+          <div class="error-emoji" aria-hidden="true"><span data-icon="help-circle" data-icon-size="64" data-icon-class="error-icon"></span></div>
           <h1 class="error-title">This page doesn't exist</h1>
           <p class="error-sub">
             The URL might be wrong, the page may have moved, or it was never here to begin with.
@@ -146,7 +147,7 @@
           </div>
 
           <div class="error-tip">
-            <p class="small-title">💡 While you're here</p>
+            <p class="small-title"><span data-icon="lightbulb" data-icon-size="16" data-icon-class="tip-icon"></span> While you're here</p>
             <p id="errorTip">If you can't solve a problem without looking at your notes, you've seen it — you haven't learned it yet.</p>
           </div>
         </div>

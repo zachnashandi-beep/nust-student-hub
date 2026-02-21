@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = "student-hub-v10"; // <-- bump this on every deployment
+const CACHE_NAME = "student-hub-v11"; // <-- bump this on every deployment
 
 const ASSETS = [
   "./",
@@ -19,6 +19,7 @@ const ASSETS = [
   "./nav.js",
   "./nav-auth.js",
   "./nav-mobile.js",
+  "./icons.js",
   "./auth.js",
   "./personal.js",
   "./personal-inject.js",

@@ -23,6 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <link rel="manifest" href="manifest.json" />
+    <script defer src="icons.js"></script>
     <script defer src="tip-of-day.js"></script>
     <script defer src="page-transitions.js"></script>
     <script defer src="back-to-top.js"></script>
@@ -56,14 +57,14 @@
           <button class="nav-link" id="contactOpen" type="button">Contact</button>
 
           <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">
-            🌙
+            <span data-icon="moon" data-icon-size="18"></span>
           </button>
         </nav>
       </header>
 
       <main class="hero" id="main">
         <div class="hero-text">
-          <h1>Study smarter, not harder <span>📚</span></h1>
+          <h1>Study smarter, not harder <span data-icon="book-open" data-icon-size="32" data-icon-class="hero-icon"></span></h1>
           <p class="subtitle">
             Notes, weekly breakdowns, and resources for MCI, PRG, DBF, DTN, and ISS.
           </p>
@@ -76,8 +77,10 @@
 
         <div class="hero-card tip-card" id="tipCard">
           <div class="tip-header">
-            <p class="small-title">💡 Tip of the day</p>
-            <button class="tip-shuffle-btn" id="tipShuffle" type="button" aria-label="Show another tip" title="Another tip">↻</button>
+            <p class="small-title"><span data-icon="lightbulb" data-icon-size="16" data-icon-class="tip-icon"></span> Tip of the day</p>
+            <button class="tip-shuffle-btn" id="tipShuffle" type="button" aria-label="Show another tip" title="Another tip">
+              <span data-icon="refresh-cw" data-icon-size="14"></span>
+            </button>
           </div>
           <p class="tip-text" id="tipText"></p>
           <p class="tip-meta muted" id="tipMeta"></p>
@@ -114,28 +117,28 @@
 
         <div class="guide-grid">
           <a class="guide-card" href="guide-first-year.html">
-            <div class="guide-card-icon">🎯</div>
+            <div class="guide-card-icon"><span data-icon="target" data-icon-size="28"></span></div>
             <h3>First Year Survival Guide</h3>
             <p class="muted">What to expect, what matters, and how to not fall behind.</p>
             <span class="guide-card-cta">Read guide →</span>
           </a>
 
           <a class="guide-card" href="guide-study.html">
-            <div class="guide-card-icon">🧠</div>
+            <div class="guide-card-icon"><span data-icon="brain" data-icon-size="28"></span></div>
             <h3>How to Study CS Properly</h3>
             <p class="muted">Why practice beats passive reading — and how to actually study.</p>
             <span class="guide-card-cta">Read guide →</span>
           </a>
 
           <a class="guide-card" href="guide-weekly.html">
-            <div class="guide-card-icon">📅</div>
+            <div class="guide-card-icon"><span data-icon="calendar" data-icon-size="28"></span></div>
             <h3>Weekly Study Template</h3>
             <p class="muted">A Mon–Sun schedule, daily minimums, and a 3-day test ramp plan.</p>
             <span class="guide-card-cta">Read guide →</span>
           </a>
 
           <a class="guide-card" href="guide-mistakes.html">
-            <div class="guide-card-icon">⚠️</div>
+            <div class="guide-card-icon"><span data-icon="triangle-alert" data-icon-size="28"></span></div>
             <h3>Top 10 Mistakes First Years Make</h3>
             <p class="muted">Blunt, honest, and avoidable. Don't learn these the hard way.</p>
             <span class="guide-card-cta">Read guide →</span>

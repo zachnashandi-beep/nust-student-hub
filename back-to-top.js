@@ -1,20 +1,14 @@
 /**
  * back-to-top.js
- * Robust back-to-top button that works on iOS Safari + Android.
- *
- * iOS Safari quirks handled:
- *  - scrollY may be 0 even when scrolled; use documentElement.scrollTop fallback
- *  - smooth scroll behavior needs a manual polyfill check
- *  - touch events used alongside click for reliability
+ * Robust back-to-top button — works on iOS Safari + Android.
+ * Uses Lucide arrow-up SVG (via icons.js) instead of ↑ character.
  */
 (function () {
   function getScrollY() {
-    // iOS Safari sometimes reports window.scrollY as 0; documentElement is reliable
     return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
   }
 
   function scrollToTop() {
-    // Try native smooth scroll first; fall back to instant if not supported
     try {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (e) {
@@ -27,26 +21,27 @@
     btn.id = "backToTop";
     btn.type = "button";
     btn.setAttribute("aria-label", "Back to top");
-    btn.innerHTML = "↑";
+    // Use icons.js if available, otherwise fallback to SVG inline
+    if (window.Icons) {
+      btn.innerHTML = window.Icons.svg("arrow-up", { size: 20 });
+    } else {
+      btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>`;
+    }
     document.body.appendChild(btn);
 
     function update() {
       btn.classList.toggle("visible", getScrollY() > 400);
     }
 
-    // Scroll listener — passive for performance
     window.addEventListener("scroll", update, { passive: true });
-    // iOS Safari also fires on document
     document.addEventListener("scroll", update, { passive: true });
 
-    // Both click and touchend for iOS reliability
     btn.addEventListener("click", scrollToTop);
     btn.addEventListener("touchend", (e) => {
-      e.preventDefault(); // prevent ghost click
+      e.preventDefault();
       scrollToTop();
     });
 
-    // Initial check in case page loads mid-scroll (e.g. back/forward cache)
     update();
     window.addEventListener("pageshow", update);
   }

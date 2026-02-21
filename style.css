@@ -1903,3 +1903,66 @@ dialog.modal.is-closing::backdrop {
 #backToTop:active {
   transform: scale(0.93);
 }
+
+
+/* ============================================================
+   LUCIDE SVG ICONS — global styles
+   ============================================================ */
+
+.icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  /* Inherits currentColor from parent — works in dark + light mode */
+}
+
+/* Icon in hero heading */
+.hero-icon {
+  color: var(--accent);
+  margin-left: 6px;
+  vertical-align: -4px;
+}
+
+/* Tip card lightbulb */
+.tip-icon {
+  color: var(--accent);
+  vertical-align: -2px;
+}
+
+/* Guide card icons — accent coloured, larger */
+.guide-card-icon .icon-svg,
+.guide-page-icon .icon-svg {
+  color: var(--accent);
+  display: block;
+}
+
+/* Checklist icons in guide lists */
+.checklist-icon {
+  color: var(--accent);
+  vertical-align: -3px;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+/* 404 page icon — inherits wobble animation from .error-emoji */
+.error-icon {
+  color: var(--accent);
+  opacity: 0.7;
+  display: block;
+}
+
+/* Theme toggle — icon inherits button color */
+.theme-btn .icon-svg {
+  vertical-align: middle;
+  pointer-events: none;
+}
+
+/* Tip shuffle button icon */
+.tip-shuffle-btn .icon-svg {
+  pointer-events: none;
+}
+
+/* Back to top SVG */
+#backToTop .icon-svg {
+  pointer-events: none;
+}
