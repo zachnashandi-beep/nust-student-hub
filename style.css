@@ -91,6 +91,11 @@ a:focus-visible {
   }
 }
 
+/* Universal box-sizing — padding/border never add to element width */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* ---------- Base ---------- */
 body {
   background: radial-gradient(circle at top left, var(--bg2), var(--bg) 60%);
