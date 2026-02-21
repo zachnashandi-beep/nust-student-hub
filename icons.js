@@ -70,10 +70,8 @@ window.Icons = {
     if (!def) return this.svg(name, { size, cls });
 
     const url = `https://fonts.gstatic.com/s/e/notoemoji/latest/${def.emoji}/emoji.svg`;
-    const svgFallback = this.svg(name, { size, cls });
 
-    // onerror replaces the img with the SVG string injected into a span
-    return `<img src="${url}" width="${size}" height="${size}" alt="${def.fallback}" class="icon-svg noto-emoji${cls ? " " + cls : ""}" aria-hidden="true" loading="lazy" onerror="this.outerHTML=${JSON.stringify(svgFallback || def.fallback)}" />`;
+    return `<img src="${url}" width="${size}" height="${size}" alt="${def.fallback}" class="icon-svg noto-emoji${cls ? " " + cls : ""}" aria-hidden="true" loading="lazy" data-icon-fallback="${name}" />`;
   },
 
   hydrate() {
@@ -82,7 +80,6 @@ window.Icons = {
       const size = parseInt(el.dataset.iconSize || "18", 10);
       const cls = el.dataset.iconClass || "";
 
-      // Use Noto emoji for decorative display icons
       if (EMOJI_ICONS[name]) {
         el.innerHTML = this.emojiImg(name, { size, cls });
         el.classList.add("icon");
@@ -93,6 +90,21 @@ window.Icons = {
           el.classList.add("icon");
         }
       }
+    });
+
+    // Attach fallback handlers after inserting into DOM
+    document.querySelectorAll("img[data-icon-fallback]").forEach((img) => {
+      img.addEventListener("error", () => {
+        const name = img.dataset.iconFallback;
+        const size = parseInt(img.getAttribute("width") || "28", 10);
+        const cls = (img.className || "").replace("icon-svg", "").replace("noto-emoji", "").trim();
+        const svg = window.Icons.svg(name, { size, cls });
+        if (svg) {
+          const span = document.createElement("span");
+          span.innerHTML = svg;
+          img.replaceWith(span.firstChild);
+        }
+      }, { once: true });
     });
   },
 };
