@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () { document.documentElement.classList.remove("loading"); });
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to Study CS Properly • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="nav-auth.js"></script>
+    <script defer src="contact.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="guides.html" class="active">Guides</a>
+          <a href="index.html?to=resources">Resources</a>
+          <button class="nav-link" id="contactOpen" type="button">Contact</button>
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+        </nav>
+      </header>
+
+      <main class="page guide-page" id="main">
+        <a class="guide-back-btn btn" href="guides.html">← Back to Guides</a>
+
+        <div class="guide-page-header">
+          <div class="guide-page-icon">🧠</div>
+          <h1>How to Study CS Properly</h1>
+          <p class="subtitle">The wrong way vs the right way — and why practice beats passive reading every single time.</p>
+        </div>
+
+        <div class="guide-content">
+
+          <section class="guide-section">
+            <h2>The wrong way to study</h2>
+            <p>Most first years do this, and most first years are surprised by their test results. Sound familiar?</p>
+            <ul class="guide-list guide-list--bad">
+              <li>Watching YouTube videos for hours without doing anything</li>
+              <li>Reading slides or notes without testing yourself</li>
+              <li>Copy-pasting code from examples without understanding it</li>
+              <li>Cramming the night before a test</li>
+              <li>Highlighting text and calling it revision</li>
+            </ul>
+            <p>These feel productive. They're not. Passive consumption doesn't build the mental models you need to actually answer questions under pressure.</p>
+          </section>
+
+          <section class="guide-section">
+            <h2>The right way</h2>
+            <p>CS is a practical subject. The study method that works is active and iterative:</p>
+            <ul class="guide-list guide-list--good">
+              <li><strong>Learn → Practice → Review</strong> — not Learn → Read more → Hope.</li>
+              <li>Active recall: close your notes and explain the concept out loud or on paper.</li>
+              <li>Practice until it's boring. When something feels boring, that usually means you've actually learned it.</li>
+              <li>Review your mistakes — that's where most of the learning actually happens.</li>
+            </ul>
+            <div class="guide-callout">
+              <p><strong>The rule:</strong> If you can't solve a problem without looking at your notes, you haven't learned it yet. You've just seen it.</p>
+            </div>
+          </section>
+
+          <section class="guide-section">
+            <h2>How to use YouTube without wasting time</h2>
+            <p>YouTube is genuinely useful for CS — but only if you use it as a trigger for practice, not a replacement for it.</p>
+            <ul class="guide-list">
+              <li>Watch 5–10 minutes max per concept.</li>
+              <li>Pause. Don't just let it play.</li>
+              <li>Write notes in your own words immediately after.</li>
+              <li>Then do 3–5 practice questions or tasks before watching anything else.</li>
+            </ul>
+            <p>If you've watched 2 hours of content and done zero problems, you've wasted 2 hours.</p>
+          </section>
+
+          <section class="guide-section">
+            <h2>How to study programming (PRG)</h2>
+            <p>Programming cannot be learned by watching. It has to be built.</p>
+            <ul class="guide-list">
+              <li><strong>Retype code yourself</strong> — don't copy-paste from examples, even correct ones. The act of typing forces your brain to process each line.</li>
+              <li>Start with tiny tasks: input/output → conditions → loops → functions → classes. Don't skip levels.</li>
+              <li>Build mini-projects: a calculator, a number guessing game, a simple menu app. Small things with a clear result.</li>
+              <li><strong>Debugging is learning.</strong> When something breaks, don't immediately search for the answer — read the error message, think about what line it points to, and try to fix it yourself first. That process is where the skill is built.</li>
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>How to study math modules (MCI)</h2>
+            <p>MCI is logic-heavy — Boolean algebra, sets, combinatorics, number systems. The only way to get good at it is volume of practice.</p>
+            <ul class="guide-list">
+              <li><strong>Daily drills.</strong> Even 15–20 minutes a day of short problem sets keeps your brain sharp on the patterns.</li>
+              <li>Use mixed question sets — don't just practice the one topic you already understand.</li>
+              <li><strong>Face the hard topics early.</strong> If Boolean simplification or K-maps are confusing, do more of them — not less. Avoidance compounds into test panic.</li>
+              <li>Write out your working even for questions you think are easy. Exam markers want to see reasoning, and it helps you catch small errors.</li>
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>How to study databases (DBF)</h2>
+            <ul class="guide-list">
+              <li>Write SQL queries from scratch — don't just read them or modify existing ones.</li>
+              <li>Set up MySQL Workbench and actually run your queries. Seeing real results builds intuition fast.</li>
+              <li>Understand <em>why</em> a query works, not just <em>what</em> it does. If you can explain it in plain English, you know it.</li>
+              <li>Practice joins and normalization repeatedly — those are where most people lose marks.</li>
+            </ul>
+          </section>
+
+        </div>
+
+        <div class="guide-nav-bottom">
+          <a class="btn" href="guide-first-year.html">← Survival Guide</a>
+          <a class="btn" href="guide-weekly.html">Next: Weekly Template →</a>
+        </div>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">← <a href="guides.html">Back to Guides</a></p>
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <dialog class="modal" id="authModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Verification</p><h3 class="modal-title">Verify Profile</h3></div>
+          <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Enter your username and access key to access personalized content.</p>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input type="text" id="authUsername" placeholder="username" autocomplete="username" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+        </div>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+          <div class="input-with-toggle">
+            <input type="password" id="authAccessKey" placeholder="access key" autocomplete="current-password" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+            <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
+          </div>
+        </div>
+        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+        <div class="modal-actions"><button class="btn primary" type="button" id="authSubmit">Verify</button></div>
+      </div>
+    </dialog>
+    <dialog class="modal" id="contactModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Contact</p><h3 class="modal-title">Get in touch</h3></div>
+          <button class="modal-close" type="button" id="contactClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Found a broken link or have a suggestion?</p>
+        <div class="card" style="padding:12px; margin:12px 0;">
+          <p style="margin:0 0 6px;"><strong>Email</strong></p>
+          <a href="mailto:zachapp.team@gmail.com" id="contactEmail">zachapp.team@gmail.com</a>
+          <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+        </div>
+        <div class="modal-actions contact-actions">
+          <a class="btn primary" href="#" target="_blank" rel="noopener" id="suggestLink">Suggest a resource</a>
+          <a class="btn" href="#" target="_blank" rel="noopener" id="reportLink">Report broken link</a>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

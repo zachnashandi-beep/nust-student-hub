@@ -1,11 +1,16 @@
 // sw.js
-const CACHE_NAME = "student-hub-v4"; // <-- bump this on every deployment
+const CACHE_NAME = "student-hub-v5"; // <-- bump this on every deployment
 
 const ASSETS = [
   "./",
   "./index.html",
   "./modules.html",
   "./personal.html",
+  "./guides.html",
+  "./guide-first-year.html",
+  "./guide-study.html",
+  "./guide-weekly.html",
+  "./guide-mistakes.html",
 
   "./style.css",
   "./manifest.json",

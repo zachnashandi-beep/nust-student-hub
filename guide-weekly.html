@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () { document.documentElement.classList.remove("loading"); });
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Study Template • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="nav-auth.js"></script>
+    <script defer src="contact.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="guides.html" class="active">Guides</a>
+          <a href="index.html?to=resources">Resources</a>
+          <button class="nav-link" id="contactOpen" type="button">Contact</button>
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+        </nav>
+      </header>
+
+      <main class="page guide-page" id="main">
+        <a class="guide-back-btn btn" href="guides.html">← Back to Guides</a>
+
+        <div class="guide-page-header">
+          <div class="guide-page-icon">📅</div>
+          <h1>Weekly Study Template</h1>
+          <p class="subtitle">A realistic Mon–Sun schedule, daily minimums, and a 3-day test ramp plan.</p>
+        </div>
+
+        <div class="guide-content">
+
+          <section class="guide-section">
+            <h2>Minimum daily routine (Mon–Fri)</h2>
+            <p>You don't need to study 8 hours a day. You need to study <em>consistently</em>. These are the minimums that keep you from falling behind:</p>
+            <ul class="guide-checklist">
+              <li>✅ 30–60 minutes of programming practice (coding problems, exercises, or building something small)</li>
+              <li>✅ 20–40 minutes of math or logic practice (MCI drills, past questions)</li>
+              <li>✅ 10 minutes reviewing that day's lecture notes or content</li>
+            </ul>
+            <p>That's roughly 1–1.5 hours a day. Manageable. Do it consistently and you won't need to panic before tests.</p>
+          </section>
+
+          <section class="guide-section">
+            <h2>Weekly plan template</h2>
+            <p>This is a template — adjust it to your timetable. The goal is spreading effort across the week so no single day is overwhelming.</p>
+
+            <div class="week-schedule">
+              <div class="week-day">
+                <div class="week-day-label">Monday</div>
+                <div class="week-day-tasks">Review this week's lectures + do a small practice set on new content.</div>
+              </div>
+              <div class="week-day">
+                <div class="week-day-label">Tuesday</div>
+                <div class="week-day-tasks">Programming exercises — focus on whatever concept was covered this week. Build something, don't just read.</div>
+              </div>
+              <div class="week-day">
+                <div class="week-day-label">Wednesday</div>
+                <div class="week-day-tasks">MCI drills + DBF query practice. Midweek is a good checkpoint for math progress.</div>
+              </div>
+              <div class="week-day">
+                <div class="week-day-label">Thursday</div>
+                <div class="week-day-tasks">Build a mini programming task + revisit any topics you're weak on. Don't avoid them.</div>
+              </div>
+              <div class="week-day">
+                <div class="week-day-label">Friday</div>
+                <div class="week-day-tasks">Mixed revision across all active modules. Do a short self-test — write down what you know without looking at notes.</div>
+              </div>
+              <div class="week-day week-day--weekend">
+                <div class="week-day-label">Saturday</div>
+                <div class="week-day-tasks">Past paper or exam-style questions. Time yourself. Treat it like a real test environment.</div>
+              </div>
+              <div class="week-day week-day--weekend">
+                <div class="week-day-label">Sunday</div>
+                <div class="week-day-tasks">Light recap only — review your mistakes from Saturday. Plan next week. Rest intentionally.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="guide-section">
+            <h2>3-day test ramp plan</h2>
+            <p>When a test is 3 days away, this is the approach that works. It assumes you've been keeping up — if not, start 5–6 days out and add a "catch up on content" phase first.</p>
+
+            <div class="guide-module-card">
+              <h3>Day −3 (3 days before)</h3>
+              <p>Understand the topics. Go through your notes, watch short videos if needed, and create a summary sheet for each major topic. No heavy practice yet — you need clarity first.</p>
+            </div>
+
+            <div class="guide-module-card">
+              <h3>Day −2 (2 days before)</h3>
+              <p>Practice questions only. No re-reading slides. Work through as many questions as you can — past papers, textbook problems, anything with a clear answer. Check your answers and note every mistake.</p>
+            </div>
+
+            <div class="guide-module-card">
+              <h3>Day −1 (day before)</h3>
+              <p>Timed questions in test conditions. Set a timer, work through a past paper or question set without help. Then review your mistakes — only focus on the things you got wrong, not the things you already know.</p>
+            </div>
+
+            <div class="guide-callout">
+              <p><strong>The night before:</strong> Don't cram until midnight. Review your summary sheet at 9pm, get to sleep on time. Sleep is not optional — your brain consolidates memory while you sleep.</p>
+            </div>
+          </section>
+
+          <section class="guide-section">
+            <h2>If you have very limited time</h2>
+            <p>If life happened and you only have 2 hours before a test — be strategic:</p>
+            <ul class="guide-list">
+              <li><strong>Do practice first. Notes second.</strong> Attempting questions reveals exactly what you don't know. Reading notes feels complete but often isn't.</li>
+              <li>Focus on high-frequency topics — things that appear in every past paper.</li>
+              <li>Skip trying to learn brand new concepts. Consolidate what you partially know instead.</li>
+            </ul>
+          </section>
+
+        </div>
+
+        <div class="guide-nav-bottom">
+          <a class="btn" href="guide-study.html">← How to Study CS</a>
+          <a class="btn" href="guide-mistakes.html">Next: Top 10 Mistakes →</a>
+        </div>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">← <a href="guides.html">Back to Guides</a></p>
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <dialog class="modal" id="authModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Verification</p><h3 class="modal-title">Verify Profile</h3></div>
+          <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Enter your username and access key to access personalized content.</p>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input type="text" id="authUsername" placeholder="username" autocomplete="username" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+        </div>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+          <div class="input-with-toggle">
+            <input type="password" id="authAccessKey" placeholder="access key" autocomplete="current-password" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+            <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
+          </div>
+        </div>
+        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+        <div class="modal-actions"><button class="btn primary" type="button" id="authSubmit">Verify</button></div>
+      </div>
+    </dialog>
+    <dialog class="modal" id="contactModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Contact</p><h3 class="modal-title">Get in touch</h3></div>
+          <button class="modal-close" type="button" id="contactClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Found a broken link or have a suggestion?</p>
+        <div class="card" style="padding:12px; margin:12px 0;">
+          <p style="margin:0 0 6px;"><strong>Email</strong></p>
+          <a href="mailto:zachapp.team@gmail.com" id="contactEmail">zachapp.team@gmail.com</a>
+          <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+        </div>
+        <div class="modal-actions contact-actions">
+          <a class="btn primary" href="#" target="_blank" rel="noopener" id="suggestLink">Suggest a resource</a>
+          <a class="btn" href="#" target="_blank" rel="noopener" id="reportLink">Report broken link</a>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

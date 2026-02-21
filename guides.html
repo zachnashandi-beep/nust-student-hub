@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () {
+            document.documentElement.classList.remove("loading");
+          });
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guides • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="nav-auth.js"></script>
+    <script defer src="contact.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="guides.html" class="active">Guides</a>
+          <a href="index.html?to=resources">Resources</a>
+          <button class="nav-link" id="contactOpen" type="button">Contact</button>
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+        </nav>
+      </header>
+
+      <main class="page" id="main">
+        <div class="guide-page-header">
+          <h1>Guides</h1>
+          <p class="subtitle">Student-made survival guides for NUST CS — Year 1 focus.</p>
+          <p class="guide-disclaimer muted">Not affiliated with NUST. Student-made.</p>
+        </div>
+
+        <div class="guide-grid">
+          <a class="guide-card" href="guide-first-year.html">
+            <div class="guide-card-icon">🎯</div>
+            <h3>First Year Survival Guide</h3>
+            <p class="muted">What to expect, what matters, and how to not fall behind in your first semester.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+
+          <a class="guide-card" href="guide-study.html">
+            <div class="guide-card-icon">🧠</div>
+            <h3>How to Study CS Properly</h3>
+            <p class="muted">The wrong vs right way to study — and why practice beats passive reading every time.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+
+          <a class="guide-card" href="guide-weekly.html">
+            <div class="guide-card-icon">📅</div>
+            <h3>Weekly Study Template</h3>
+            <p class="muted">A realistic Mon–Sun schedule, daily minimums, and a 3-day test ramp plan.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+
+          <a class="guide-card" href="guide-mistakes.html">
+            <div class="guide-card-icon">⚠️</div>
+            <h3>Top 10 Mistakes First Years Make</h3>
+            <p class="muted">Blunt, honest, and avoidable. Don't learn these the hard way.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+        </div>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">← <a href="index.html">Back to Home</a></p>
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <dialog class="modal" id="contactModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div>
+            <p class="modal-date">Contact</p>
+            <h3 class="modal-title">Get in touch</h3>
+          </div>
+          <button class="modal-close" type="button" id="contactClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Found a broken link, want to add past papers, or have a suggestion?</p>
+        <div class="card" style="padding:12px; margin:12px 0;">
+          <p style="margin:0 0 6px;"><strong>Email</strong></p>
+          <a href="mailto:zachapp.team@gmail.com?subject=Student%20Hub%20Suggestion%20or%20Report" id="contactEmail">zachapp.team@gmail.com</a>
+          <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+        </div>
+        <div class="modal-actions contact-actions">
+          <a class="btn primary" href="#" target="_blank" rel="noopener" id="suggestLink">Suggest a resource</a>
+          <a class="btn" href="#" target="_blank" rel="noopener" id="reportLink">Report broken link</a>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="modal" id="authModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div>
+            <p class="modal-date">Verification</p>
+            <h3 class="modal-title">Verify Profile</h3>
+          </div>
+          <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Enter your username and access key to access personalized content.</p>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input type="text" id="authUsername" placeholder="username" autocomplete="username" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+        </div>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+          <div class="input-with-toggle">
+            <input type="password" id="authAccessKey" placeholder="access key" autocomplete="current-password" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+            <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
+          </div>
+        </div>
+        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+        <div class="modal-actions">
+          <button class="btn primary" type="button" id="authSubmit">Verify</button>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

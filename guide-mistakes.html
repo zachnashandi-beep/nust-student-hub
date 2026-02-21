@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () { document.documentElement.classList.remove("loading"); });
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Top 10 Mistakes • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="nav-auth.js"></script>
+    <script defer src="contact.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="guides.html" class="active">Guides</a>
+          <a href="index.html?to=resources">Resources</a>
+          <button class="nav-link" id="contactOpen" type="button">Contact</button>
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+        </nav>
+      </header>
+
+      <main class="page guide-page" id="main">
+        <a class="guide-back-btn btn" href="guides.html">← Back to Guides</a>
+
+        <div class="guide-page-header">
+          <div class="guide-page-icon">⚠️</div>
+          <h1>Top 10 Mistakes First Years Make</h1>
+          <p class="subtitle">Blunt, honest, and avoidable. Don't learn these the hard way.</p>
+        </div>
+
+        <div class="guide-content">
+          <p>These aren't rare edge cases — these are the things that catch most first years at some point. Reading this doesn't make you immune, but it does mean you can't say you weren't warned.</p>
+
+          <ol class="mistakes-list">
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">01</span>
+                <h3>Waiting until tests to practice</h3>
+              </div>
+              <p class="muted">You can't cram CS. Programming and math require pattern recognition built over time. Doing past questions the night before a test is not studying — it's panic dressed up as studying.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Do small practice sessions daily. 30 minutes every day beats 5 hours the night before, every time.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">02</span>
+                <h3>Ignoring MCI because "I'm doing CS, not maths"</h3>
+              </div>
+              <p class="muted">MCI is literally the logic your code runs on. Boolean algebra, binary, logic gates, combinatorics — these show up everywhere, including in programming interviews later in your career.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Treat MCI like a core CS skill, because it is. Do daily drills from week 1.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">03</span>
+                <h3>Copy-pasting code without understanding it</h3>
+              </div>
+              <p class="muted">When the test comes and you have to write code from scratch without Google, you'll realize you never actually learned it. This is the fastest way to feel confident and perform badly.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Retype every example yourself. Modify it. Break it on purpose. Understand why it works, not just what it does.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">04</span>
+                <h3>Reading slides and calling it studying</h3>
+              </div>
+              <p class="muted">Reading is passive. Your brain will give you a false sense of familiarity with content you don't actually understand yet.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> After reading a topic, close the slides and write down everything you remember. Then check what you missed. That gap is what you actually need to study.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">05</span>
+                <h3>Not asking questions until week 9</h3>
+              </div>
+              <p class="muted">By week 9, you've built a tower on a shaky foundation. Lecturers and tutors are far more helpful to students who come early with genuine questions than to students who appear in week 9 saying "I don't understand anything."</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Ask in week 2. Ask before you're lost, not after. No question is too basic in weeks 1–4.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">06</span>
+                <h3>Studying only when you're motivated</h3>
+              </div>
+              <p class="muted">Motivation is unreliable. It shows up when things are new and interesting and disappears by week 5. If you only study when you feel like it, you will fall behind.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Build a routine. Same time, same location, same minimum duration. Discipline shows up when motivation doesn't.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">07</span>
+                <h3>Never using past papers</h3>
+              </div>
+              <p class="muted">Past papers show you the pattern — what types of questions come up, how they're phrased, what level of detail is expected. Ignoring them means you're studying blind.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Get past papers as early as possible. Do them under timed conditions at least once before every assessment.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">08</span>
+                <h3>Confusing "being busy" with "being productive"</h3>
+              </div>
+              <p class="muted">Spending 4 hours at your desk, reorganizing notes, watching videos, and chatting between tasks is not the same as 90 minutes of focused practice. Busyness is a feeling. Productivity is measurable output.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Ask yourself: what did I actually produce or practice in the last hour? If the answer is vague, something's off.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">09</span>
+                <h3>Leaving assignments until the night before</h3>
+              </div>
+              <p class="muted">CS assignments often reveal misunderstandings you didn't know you had. Starting the night before means you have no time to fix them — or to ask for help.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Start assignments within 48 hours of receiving them. Even just reading the brief and writing the first function. Early starts mean calm finishes.</p>
+            </li>
+
+            <li class="mistake-item">
+              <div class="mistake-header">
+                <span class="mistake-number">10</span>
+                <h3>Studying alone in silence forever</h3>
+              </div>
+              <p class="muted">Solo study has its place, but explaining concepts to someone else — even just out loud to yourself — is one of the most effective ways to find out what you don't actually understand. Isolation also makes it easier to quit when it gets hard.</p>
+              <p class="mistake-fix">→ <strong>Fix:</strong> Study with a friend or a small group occasionally. Teach each other topics. Explaining forces clarity. Just make sure it stays productive.</p>
+            </li>
+
+          </ol>
+
+          <div class="guide-callout" style="margin-top: 32px;">
+            <p>If you recognize yourself in 3 or more of these — that's fine. Recognizing the pattern is the first step. Pick one to fix this week, not all ten at once.</p>
+          </div>
+
+        </div>
+
+        <div class="guide-nav-bottom">
+          <a class="btn" href="guide-weekly.html">← Weekly Template</a>
+          <a class="btn" href="guides.html">All Guides →</a>
+        </div>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">← <a href="guides.html">Back to Guides</a></p>
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <dialog class="modal" id="authModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Verification</p><h3 class="modal-title">Verify Profile</h3></div>
+          <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Enter your username and access key to access personalized content.</p>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input type="text" id="authUsername" placeholder="username" autocomplete="username" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+        </div>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+          <div class="input-with-toggle">
+            <input type="password" id="authAccessKey" placeholder="access key" autocomplete="current-password" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+            <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
+          </div>
+        </div>
+        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+        <div class="modal-actions"><button class="btn primary" type="button" id="authSubmit">Verify</button></div>
+      </div>
+    </dialog>
+    <dialog class="modal" id="contactModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Contact</p><h3 class="modal-title">Get in touch</h3></div>
+          <button class="modal-close" type="button" id="contactClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Found a broken link or have a suggestion?</p>
+        <div class="card" style="padding:12px; margin:12px 0;">
+          <p style="margin:0 0 6px;"><strong>Email</strong></p>
+          <a href="mailto:zachapp.team@gmail.com" id="contactEmail">zachapp.team@gmail.com</a>
+          <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+        </div>
+        <div class="modal-actions contact-actions">
+          <a class="btn primary" href="#" target="_blank" rel="noopener" id="suggestLink">Suggest a resource</a>
+          <a class="btn" href="#" target="_blank" rel="noopener" id="reportLink">Report broken link</a>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

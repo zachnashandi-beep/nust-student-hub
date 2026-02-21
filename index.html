@@ -46,6 +46,7 @@
 
         <nav class="nav">
           <a href="modules.html">Modules</a>
+          <a href="guides.html">Guides</a>
           <a href="#resources">Resources</a>
           <button class="nav-link" id="contactOpen" type="button">Contact</button>
 
@@ -80,6 +81,47 @@
           </p>
         </div>
       </main>
+
+      <section class="section" id="start-here">
+        <div class="section-head">
+          <h2>Start here <span style="font-size:1rem; font-weight:400; color:var(--muted);">— Year 1</span></h2>
+          <p class="muted">Student-made guides to help you study smarter and avoid common mistakes.</p>
+        </div>
+
+        <div class="guide-grid">
+          <a class="guide-card" href="guide-first-year.html">
+            <div class="guide-card-icon">🎯</div>
+            <h3>First Year Survival Guide</h3>
+            <p class="muted">What to expect, what matters, and how to not fall behind.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+
+          <a class="guide-card" href="guide-study.html">
+            <div class="guide-card-icon">🧠</div>
+            <h3>How to Study CS Properly</h3>
+            <p class="muted">Why practice beats passive reading — and how to actually study.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+
+          <a class="guide-card" href="guide-weekly.html">
+            <div class="guide-card-icon">📅</div>
+            <h3>Weekly Study Template</h3>
+            <p class="muted">A Mon–Sun schedule, daily minimums, and a 3-day test ramp plan.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+
+          <a class="guide-card" href="guide-mistakes.html">
+            <div class="guide-card-icon">⚠️</div>
+            <h3>Top 10 Mistakes First Years Make</h3>
+            <p class="muted">Blunt, honest, and avoidable. Don't learn these the hard way.</p>
+            <span class="guide-card-cta">Read guide →</span>
+          </a>
+        </div>
+
+        <p style="margin-top:14px; font-size:0.9rem;">
+          <a href="guides.html" style="color:var(--accent);">See all guides →</a>
+        </p>
+      </section>
 
       <section class="section" id="updates">
         <div class="section-head">
@@ -202,13 +244,16 @@
 
           <div style="margin:12px 0;">
             <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
-            <input
-              type="password"
-              id="authAccessKey"
-              placeholder="access key"
-              autocomplete="current-password"
-              style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
-            />
+            <div class="input-with-toggle">
+              <input
+                type="password"
+                id="authAccessKey"
+                placeholder="access key"
+                autocomplete="current-password"
+                style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+              />
+              <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
+            </div>
           </div>
 
           <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () { document.documentElement.classList.remove("loading"); });
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>First Year Survival Guide • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="nav-auth.js"></script>
+    <script defer src="contact.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="guides.html" class="active">Guides</a>
+          <a href="index.html?to=resources">Resources</a>
+          <button class="nav-link" id="contactOpen" type="button">Contact</button>
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+        </nav>
+      </header>
+
+      <main class="page guide-page" id="main">
+        <a class="guide-back-btn btn" href="guides.html">← Back to Guides</a>
+
+        <div class="guide-page-header">
+          <div class="guide-page-icon">🎯</div>
+          <h1>First Year Survival Guide</h1>
+          <p class="subtitle">What to expect, what matters, and how to stay on track from day one.</p>
+        </div>
+
+        <div class="guide-content">
+
+          <section class="guide-section">
+            <h2>What to expect</h2>
+            <p>CS is not "just computers." It's problem solving, logic, and discipline — the computers are just the tool. First year is designed to give you a foundation across multiple areas at once: mathematics, programming, databases, networking, and systems.</p>
+            <p>The pace feels slow at first — week 1 and 2 might feel almost too easy. Don't be fooled. The workload compounds fast, and by mid-semester, multiple deadlines will hit at the same time. The hardest part of Year 1 is not intelligence — it's <strong>consistency</strong>.</p>
+          </section>
+
+          <section class="guide-section">
+            <h2>Why it feels overwhelming</h2>
+            <p>If you're feeling overwhelmed, it's not because you're in the wrong degree. It's because:</p>
+            <ul class="guide-list">
+              <li>It's a new environment with new people, new independence, and new expectations all at once.</li>
+              <li>You're studying 5+ different subjects simultaneously, each with its own logic.</li>
+              <li>You don't know yet what actually matters — so everything feels urgent.</li>
+              <li>You're genuinely learning how to learn again. High school study habits often don't transfer well to university CS.</li>
+            </ul>
+            <p>This is normal. Almost everyone feels this way in weeks 1–4.</p>
+          </section>
+
+          <section class="guide-section">
+            <h2>Don't panic about this</h2>
+            <ul class="guide-list">
+              <li><strong>Feeling lost in week 1–3 is completely normal.</strong> The people who look like they know everything are mostly performing confidence.</li>
+              <li><strong>Everyone struggles in math and programming moments.</strong> There will be a topic that clicks for some and doesn't for others. That's the subject, not your ceiling.</li>
+              <li><strong>You're not behind just because someone talks big.</strong> Half the people loudly discussing code in week 1 will be scrambling by week 6. Focus on your own progress.</li>
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>The 3 modules to take seriously from day one</h2>
+
+            <div class="guide-module-card">
+              <h3>Mathematics for Computing (MCI)</h3>
+              <p>This is pure logic — Boolean algebra, combinatorics, sets, number systems. It's heavily practice-based. If you don't do exercises regularly, it will catch you off guard in tests. Do problems daily, not just before assessments.</p>
+            </div>
+
+            <div class="guide-module-card">
+              <h3>Introduction to Programming (PRG)</h3>
+              <p>This is about learning to think like a programmer. The language is secondary — the skill is breaking problems into steps. Don't just watch examples. Type the code yourself, make it break, fix it. That's how you actually learn this.</p>
+            </div>
+
+            <div class="guide-module-card">
+              <h3>Database Fundamentals (DBF)</h3>
+              <p>SQL and data logic. It seems straightforward early on, but gets layered quickly — joins, normalization, constraints. Practice writing queries from scratch, not just reading them. The difference between someone who "gets" DBF and someone who doesn't is almost always hands-on time.</p>
+            </div>
+          </section>
+
+          <section class="guide-section">
+            <h2>Easy modules can still trip you up</h2>
+            <p>Some modules might feel light in terms of content, but they come with assignments, portfolios, or group work that has real weight. Don't let "easy" make you complacent. Missing low-effort marks is the most avoidable mistake in first year.</p>
+            <ul class="guide-list">
+              <li>Read assignment briefs carefully — the instructions are usually more specific than they look.</li>
+              <li>Deadlines in "soft" modules still fail students. Treat every deadline the same.</li>
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>Recovery plan if you fall behind</h2>
+            <p>If you've missed a few weeks of content, here's the approach that actually works:</p>
+            <ul class="guide-list">
+              <li><strong>Don't try to catch 6 weeks in one day.</strong> It won't stick and you'll burn out.</li>
+              <li>Catch up in layers: first understand the topics broadly, then do practice questions on each, then tackle past exam questions.</li>
+              <li>Minimum daily effort beats weekend panic sessions every time. Even 45 minutes a day will compound faster than you think.</li>
+              <li>Ask for help early — lecturers are more willing to assist students who show up before the test, not after it.</li>
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>Quick checklist</h2>
+            <ul class="guide-checklist">
+              <li>✅ Attend lectures or watch/cover the content on the same day</li>
+              <li>✅ Do a small practice session daily (even 20 minutes)</li>
+              <li>✅ Keep up with smaller assignments — don't let them pile</li>
+              <li>✅ Ask questions early — week 2, not week 9</li>
+              <li>✅ Know what your assessments are and when they're due</li>
+            </ul>
+          </section>
+
+        </div>
+
+        <div class="guide-nav-bottom">
+          <a class="btn" href="guides.html">← Back to Guides</a>
+          <a class="btn" href="guide-study.html">Next: How to Study CS →</a>
+        </div>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">← <a href="guides.html">Back to Guides</a></p>
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <dialog class="modal" id="authModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Verification</p><h3 class="modal-title">Verify Profile</h3></div>
+          <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Enter your username and access key to access personalized content.</p>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input type="text" id="authUsername" placeholder="username" autocomplete="username" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+        </div>
+        <div style="margin:12px 0;">
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+          <div class="input-with-toggle">
+            <input type="password" id="authAccessKey" placeholder="access key" autocomplete="current-password" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;" />
+            <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
+          </div>
+        </div>
+        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+        <div class="modal-actions"><button class="btn primary" type="button" id="authSubmit">Verify</button></div>
+      </div>
+    </dialog>
+    <dialog class="modal" id="contactModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div><p class="modal-date">Contact</p><h3 class="modal-title">Get in touch</h3></div>
+          <button class="modal-close" type="button" id="contactClose" aria-label="Close">✕</button>
+        </div>
+        <p class="modal-body">Found a broken link or have a suggestion?</p>
+        <div class="card" style="padding:12px; margin:12px 0;">
+          <p style="margin:0 0 6px;"><strong>Email</strong></p>
+          <a href="mailto:zachapp.team@gmail.com" id="contactEmail">zachapp.team@gmail.com</a>
+          <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+        </div>
+        <div class="modal-actions contact-actions">
+          <a class="btn primary" href="#" target="_blank" rel="noopener" id="suggestLink">Suggest a resource</a>
+          <a class="btn" href="#" target="_blank" rel="noopener" id="reportLink">Report broken link</a>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>
