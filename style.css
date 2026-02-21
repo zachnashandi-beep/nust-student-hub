@@ -1663,9 +1663,9 @@ dialog.modal.is-closing::backdrop {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  width: 38px;
-  height: 38px;
-  padding: 6px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -1673,6 +1673,7 @@ dialog.modal.is-closing::backdrop {
   flex-shrink: 0;
   z-index: 1100;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-toggle-bar {
@@ -1683,9 +1684,10 @@ dialog.modal.is-closing::backdrop {
   border-radius: 2px;
   transition: transform 0.25s ease, opacity 0.2s ease;
   transform-origin: center;
+  will-change: transform;
 }
 
-/* Animate bars to X when open */
+/* Bars animate to X when open */
 .nav-open .nav-toggle-btn .nav-toggle-bar:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
@@ -1697,147 +1699,147 @@ dialog.modal.is-closing::backdrop {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Backdrop */
+/*
+ * Backdrop — simple dark overlay, NO blur.
+ * Backdrop blur here forces the browser to composite the entire page
+ * on every scroll frame, which causes the jank you were seeing.
+ * The glass effect lives on the nav drawer only (isolated layer).
+ */
 .nav-backdrop {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 998;
   opacity: 0;
-  transition: opacity 0.25s ease;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  transition: opacity 0.22s ease;
+  /* NO backdrop-filter here */
 }
 .nav-backdrop--visible {
   opacity: 1;
 }
 
 @media (max-width: 768px) {
-  /* Show hamburger */
   .nav-toggle-btn {
     display: flex;
   }
 
-  /* Nav becomes a dropdown drawer below the topbar */
+  /*
+   * Nav drawer — glass effect isolated here only.
+   * Using will-change: transform puts this on its own GPU layer,
+   * so the blur composites independently and doesn't touch the scroll layer.
+   */
   .nav {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
+    gap: 2px;
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     right: 0;
-    background: color-mix(in srgb, var(--bg) 96%, transparent);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 10px;
     z-index: 999;
-    backdrop-filter: blur(16px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    padding: 8px;
+    border-radius: 16px;
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
 
-    /* Hidden by default */
+    /* Glass effect */
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    /* Isolate on its own GPU layer — prevents blur from affecting scroll */
+    will-change: transform, opacity;
+    transform: translateY(-10px) scale(0.97);
+    transform-origin: top center;
     opacity: 0;
-    transform: translateY(-8px) scale(0.98);
     pointer-events: none;
-    transition: opacity 0.22s ease, transform 0.22s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
-  /* Open state */
   .nav-open .nav {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
   }
 
-  /* Backdrop visible */
   .nav-backdrop {
     display: block;
   }
 
-  /* Nav links fill full width, bigger tap targets */
+  /* Full-width tap targets — minimum 48px height for comfort */
   .nav a,
   .nav-link {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 12px 14px;
+    min-height: 48px;
+    padding: 12px 16px;
     border-radius: 10px;
     font-size: 1rem;
     border: 1px solid transparent;
     text-align: left;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .nav a:hover,
-  .nav-link:hover {
+  .nav a:active,
+  .nav-link:active {
     background: var(--hover);
   }
 
-  /* Theme button sits alone at the bottom of the drawer */
+  /* Divider line above theme toggle */
   .theme-btn {
     display: flex;
     width: 100%;
     justify-content: center;
     border-radius: 10px;
-    padding: 10px;
-    margin-top: 4px;
+    padding: 12px;
+    margin-top: 2px;
     border-top: 1px solid var(--border);
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    border-radius: 0 0 8px 8px;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
   }
 
-  /* Topbar — keep it tight and single-row */
+  /* Topbar single row, no wrapping */
   .topbar {
     flex-wrap: nowrap;
     align-items: center;
     padding: 10px 14px;
-    position: fixed; /* ensure it stays fixed on iOS */
   }
 
-  /* Brand stays left, hamburger goes far right */
   .brand {
     flex: 1;
     font-size: 1rem;
   }
 }
 
-/* Fine-tune for very small screens */
 @media (max-width: 400px) {
   .topbar {
     width: calc(100% - 20px);
     padding: 9px 12px;
   }
-  .brand {
-    font-size: 0.95rem;
-  }
+  .brand { font-size: 0.92rem; }
 }
 
 /* ============================================================
-   GENERAL MOBILE IMPROVEMENTS
+   GENERAL MOBILE LAYOUT IMPROVEMENTS
    ============================================================ */
 
 @media (max-width: 768px) {
-  /* Better body padding for fixed topbar */
   body {
     padding-top: 80px;
   }
 
-  /* Hero stacks cleanly */
   .hero {
     grid-template-columns: 1fr;
     gap: 16px;
     padding-bottom: 8px;
   }
 
-  .hero h1 {
-    font-size: 2rem;
-  }
+  .hero h1 { font-size: 2rem; }
 
-  /* Buttons full width on small screens */
   .buttons {
     display: flex;
     flex-direction: column;
@@ -1848,49 +1850,47 @@ dialog.modal.is-closing::backdrop {
     text-align: center;
   }
 
-  /* Guide grid single column */
-  .guide-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* Stats bar 2x2 on medium mobile */
-  .stat-item {
-    min-width: 80px;
-  }
-
-  /* Cards better padding */
-  .card {
-    padding: 14px;
-  }
-
-  /* Modules page */
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  .guide-grid { grid-template-columns: 1fr; }
+  .stat-item  { min-width: 80px; }
+  .card       { padding: 14px; }
+  .grid       { grid-template-columns: 1fr; }
 }
 
-/* Back to top button (for all pages) */
+/* ============================================================
+   BACK TO TOP — iOS Safari & Android robust
+   ============================================================ */
+
 #backToTop {
   position: fixed;
   bottom: 24px;
   right: 20px;
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background: var(--accent);
   color: #fff;
   border: none;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 900;
+  z-index: 1050; /* above backdrop */
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 40%, transparent);
+  /* Larger touch target without changing visual size */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  will-change: opacity, transform;
+}
+/* Extend tap target on mobile */
+#backToTop::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
 }
 #backToTop.visible {
   opacity: 1;
@@ -1899,4 +1899,7 @@ dialog.modal.is-closing::backdrop {
 }
 #backToTop:hover {
   filter: brightness(1.12);
+}
+#backToTop:active {
+  transform: scale(0.93);
 }

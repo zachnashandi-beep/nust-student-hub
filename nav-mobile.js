@@ -1,13 +1,16 @@
 /**
  * nav-mobile.js
  * Hamburger menu for mobile viewports.
- * - Injects toggle button into topbar
- * - Toggles .nav-open class on topbar
- * - Closes on outside click, Escape, and nav link tap
- * - Works with nav-auth.js dynamic items (Personal, Sign out)
+ *
+ * Fixes:
+ *  - No body scroll lock (was breaking back-to-top scroll detection on iOS)
+ *  - Backdrop has no blur (was causing scroll jank when menu open)
+ *  - Glass effect is on the nav drawer only (GPU-composited, smooth)
+ *  - Closes on outside click, Escape, and nav link tap
+ *  - Works with nav-auth.js dynamic items
  */
 (function () {
-  const BREAKPOINT = 768; // px — below this, hamburger activates
+  const BREAKPOINT = 768;
 
   function isMobile() {
     return window.innerWidth < BREAKPOINT;
@@ -18,7 +21,7 @@
     const nav = document.querySelector(".nav");
     if (!topbar || !nav) return;
 
-    // Inject hamburger button
+    // Hamburger button
     const btn = document.createElement("button");
     btn.id = "navToggle";
     btn.type = "button";
@@ -34,7 +37,7 @@
     nav.id = "mainNav";
     topbar.appendChild(btn);
 
-    // Inject backdrop
+    // Backdrop — tap to close, NO blur (blur causes scroll jank)
     const backdrop = document.createElement("div");
     backdrop.className = "nav-backdrop";
     backdrop.setAttribute("aria-hidden", "true");
@@ -45,7 +48,7 @@
       btn.setAttribute("aria-expanded", "true");
       btn.setAttribute("aria-label", "Close navigation");
       backdrop.classList.add("nav-backdrop--visible");
-      document.body.style.overflow = "hidden";
+      // No body overflow lock — lets back-to-top scroll detection work on iOS
     }
 
     function close() {
@@ -53,33 +56,34 @@
       btn.setAttribute("aria-expanded", "false");
       btn.setAttribute("aria-label", "Open navigation");
       backdrop.classList.remove("nav-backdrop--visible");
-      document.body.style.overflow = "";
     }
 
     function toggle() {
       topbar.classList.contains("nav-open") ? close() : open();
     }
 
-    btn.addEventListener("click", toggle);
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+
     backdrop.addEventListener("click", close);
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
     });
 
-    // Close when any nav link or button is tapped
+    // Close when any nav link or button is tapped (except the toggle itself)
     nav.addEventListener("click", (e) => {
       const target = e.target.closest("a, button");
       if (target && target.id !== "navToggle") {
-        // Small delay so the click registers before nav closes
         setTimeout(close, 80);
       }
     });
 
-    // Close on resize back to desktop
     window.addEventListener("resize", () => {
       if (!isMobile()) close();
-    });
+    }, { passive: true });
   }
 
   if (document.readyState === "loading") {
