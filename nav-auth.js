@@ -1,10 +1,13 @@
 /**
  * nav-auth.js
- * - Always shows "Personal" in the nav:
- *    - if NOT verified => button that opens the auth modal
- *    - if verified     => link to personal.html
- * - Shows "Sign out" only when verified
- * - Updates on auth events
+ * - Always shows Personal:
+ *    - not verified => button opens modal
+ *    - verified     => link to personal.html
+ * - Shows Sign out only when verified
+ *
+ * Changes:
+ *  - Sign out fires auth:signedout (not auth:verified)
+ *  - Listens to both auth:verified and auth:signedout to update nav
  */
 window.addEventListener("DOMContentLoaded", () => {
   const nav = document.querySelector(".nav");
@@ -13,99 +16,79 @@ window.addEventListener("DOMContentLoaded", () => {
   const PERSONAL_ID = "navPersonal";
   const SIGNOUT_ID = "signOutBtn";
 
+  const isPersonalPage = () => window.location.pathname.includes("personal.html");
+
+  function makePersonalLink() {
+    const a = document.createElement("a");
+    a.id = PERSONAL_ID;
+    a.href = "personal.html";
+    a.textContent = "Personal";
+    if (isPersonalPage()) a.classList.add("active");
+    return a;
+  }
+
   function makePersonalButton() {
     const btn = document.createElement("button");
     btn.id = PERSONAL_ID;
-    btn.className = "nav-link";
     btn.type = "button";
+    btn.className = "nav-link";
     btn.textContent = "Personal";
     btn.addEventListener("click", () => window.openAuthModal?.());
     return btn;
   }
 
-  function makePersonalLink() {
-    const a = document.createElement("a");
-    a.id = PERSONAL_ID;
-    a.className = "nav-link";
-    a.href = "personal.html";
-    a.textContent = "Personal";
+  function makeSignOutButton() {
+    const btn = document.createElement("button");
+    btn.id = SIGNOUT_ID;
+    btn.type = "button";
+    btn.className = "nav-link";
+    btn.textContent = "Sign out";
+    btn.addEventListener("click", () => {
+      window.Auth?.clearToken?.();
+      window.dispatchEvent(new CustomEvent("auth:signedout"));
 
-    if (window.location.pathname.includes("personal.html")) {
-      a.classList.add("active");
-    }
-    return a;
+      if (isPersonalPage()) window.location.href = "index.html";
+      else window.location.reload();
+    });
+    return btn;
   }
 
-  function insertPersonal(el) {
-    // Insert before the contact button if it exists (index page), otherwise append.
+  function insertBeforeContact(el) {
     const contactBtn = nav.querySelector("#contactOpen");
     if (contactBtn) nav.insertBefore(el, contactBtn);
     else nav.appendChild(el);
   }
 
-  function ensurePersonal(isVerified) {
-    const existing = nav.querySelector(`#${PERSONAL_ID}`);
+  function updateNav() {
+    const verified = !!window.Auth?.isVerified?.();
 
-    // If it exists but is the wrong element type, replace it.
-    if (existing) {
-      const shouldBeLink = isVerified;
-      const isLinkNow = existing.tagName.toLowerCase() === "a";
-      if (shouldBeLink !== isLinkNow) {
-        existing.remove();
-      } else {
-        // Keep "active" state correct if it's a link.
-        if (isLinkNow) {
-          existing.classList.toggle(
-            "active",
-            window.location.pathname.includes("personal.html")
-          );
-        }
-        return;
+    const existingPersonal = nav.querySelector(`#${PERSONAL_ID}`);
+    const existingSignOut = nav.querySelector(`#${SIGNOUT_ID}`);
+
+    if (existingPersonal) {
+      const shouldBeLink = verified;
+      const isLink = existingPersonal.tagName.toLowerCase() === "a";
+      if (shouldBeLink !== isLink) existingPersonal.remove();
+    }
+
+    if (!nav.querySelector(`#${PERSONAL_ID}`)) {
+      const personal = verified ? makePersonalLink() : makePersonalButton();
+      insertBeforeContact(personal);
+    } else {
+      const p = nav.querySelector(`#${PERSONAL_ID}`);
+      if (p && p.tagName.toLowerCase() === "a") {
+        p.classList.toggle("active", isPersonalPage());
       }
     }
 
-    // Create if missing
-    const el = isVerified ? makePersonalLink() : makePersonalButton();
-    insertPersonal(el);
-  }
-
-  function ensureSignOut(isVerified) {
-    let btn = nav.querySelector(`#${SIGNOUT_ID}`);
-
-    if (!isVerified) {
-      if (btn) btn.remove();
-      return;
+    if (verified) {
+      if (!existingSignOut) nav.appendChild(makeSignOutButton());
+    } else {
+      if (existingSignOut) existingSignOut.remove();
     }
-
-    if (!btn) {
-      btn = document.createElement("button");
-      btn.id = SIGNOUT_ID;
-      btn.className = "nav-link";
-      btn.type = "button";
-      btn.textContent = "Sign out";
-
-      btn.addEventListener("click", () => {
-        window.Auth?.clearToken?.();
-        window.dispatchEvent(new CustomEvent("auth:verified")); // refresh nav + pages
-
-        // If you're on personal page, kick back home
-        if (window.location.pathname.includes("personal.html")) {
-          window.location.href = "index.html";
-        } else {
-          window.location.reload();
-        }
-      });
-
-      nav.appendChild(btn);
-    }
-  }
-
-  function updateNav() {
-    const isVerified = !!window.Auth?.isVerified?.();
-    ensurePersonal(isVerified);
-    ensureSignOut(isVerified);
   }
 
   updateNav();
   window.addEventListener("auth:verified", updateNav);
+  window.addEventListener("auth:signedout", updateNav);
 });

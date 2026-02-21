@@ -1,47 +1,71 @@
-const CACHE_NAME = "student-hub-v1";
-const URLS = [
-  "index.html",
-  "modules.html",
-  "style.css",
-  "manifest.json",
-  "topbar-state.js",
-  "theme.js",
-  "nav.js",
-  "updates.js",
-  "anchor-highlight.js",
-  "active-section.js",
-  "deep-link.js",
-  "contact.js",
-  "modules-data.js",
-  "command-palette.js",
+// sw.js
+const CACHE_NAME = "student-hub-v4"; // <-- bump this on every deployment
+
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./modules.html",
+  "./personal.html",
+
+  "./style.css",
+  "./manifest.json",
+
+  "./nav.js",
+  "./nav-auth.js",
+  "./auth.js",
+  "./personal.js",
+  "./personal-inject.js",
+  "./modules-data.js",
+  "./updates.js",
+  "./topbar-state.js",
+  "./active-section.js",
+  "./anchor-highlight.js",
+  "./command-palette.js",
+  "./contact.js",
+  "./deep-link.js",
+  "./theme.js",
+  "./sw-register.js",
 ];
 
-self.addEventListener("install", (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(URLS)).then(() => self.skipWaiting())
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => (k === CACHE_NAME ? null : caches.delete(k))));
+      await self.clients.claim();
+    })()
   );
 });
 
-self.addEventListener("fetch", (e) => {
-  const u = new URL(e.request.url);
-  if (u.origin !== self.location.origin) return;
-  if (u.pathname.endsWith("sw.js")) return;
-  e.respondWith(
-    caches.match(e.request).then((cached) =>
-      cached ? cached : fetch(e.request).then((r) => {
-        const clone = r.clone();
-        if (r.status === 200 && (e.request.method === "GET"))
-          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
-        return r;
-      })
-    )
+// Cache-first for same-origin assets
+self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+
+  // Don't cache your Cloudflare Worker API calls
+  if (url.hostname.includes("workers.dev") || url.hostname.includes("zach-nashandi.workers.dev")) {
+    return;
+  }
+
+  // Only handle GET
+  if (event.request.method !== "GET") return;
+
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((res) => {
+        // Cache successful same-origin responses
+        if (res.ok && url.origin === self.location.origin) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        }
+        return res;
+      });
+    })
   );
 });

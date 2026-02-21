@@ -1,6 +1,12 @@
 /**
  * Authentication: token management + verification modal
  * Token stored in localStorage as studentHub_token
+ *
+ * Changes:
+ *  - isTokenExpired(): decode JWT exp claim, auto-clear stale tokens
+ *  - checkAndClearExpiredToken(): called on page load
+ *  - Show/hide password toggle on access key input
+ *  - Uses auth:signedout event (not auth:verified) when signing out
  */
 const AUTH_TOKEN_KEY = "studentHub_token";
 const WORKER_URL = "https://student-hub-auth.zach-nashandi.workers.dev";
@@ -33,9 +39,50 @@ window.Auth = {
   },
 
   isVerified() {
-    return !!this.getToken();
+    return !!this.getToken() && !this.isTokenExpired();
+  },
+
+  /**
+   * Decode the JWT payload (no signature verification — that's the Worker's job).
+   * Returns the parsed payload or null if malformed.
+   */
+  decodeTokenPayload(token) {
+    try {
+      const parts = (token || "").split(".");
+      if (parts.length < 2) return null;
+      const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+      const json = atob(base64.padEnd(base64.length + (4 - base64.length % 4) % 4, "="));
+      return JSON.parse(json);
+    } catch {
+      return null;
+    }
+  },
+
+  /**
+   * Returns true if the token's `exp` claim is in the past.
+   * Treats missing/malformed tokens as expired.
+   */
+  isTokenExpired() {
+    const token = this.getToken();
+    if (!token) return true;
+    const payload = this.decodeTokenPayload(token);
+    if (!payload || !payload.exp) return false; // No exp claim → treat as non-expiring
+    return Date.now() / 1000 >= payload.exp;
+  },
+
+  /**
+   * Call on page load — silently clears stale tokens and fires auth:signedout.
+   */
+  checkAndClearExpiredToken() {
+    if (this.getToken() && this.isTokenExpired()) {
+      this.clearToken();
+      window.dispatchEvent(new CustomEvent("auth:signedout"));
+    }
   },
 };
+
+// Run expiry check immediately on every page load
+window.Auth.checkAndClearExpiredToken();
 
 window.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("authModal");
@@ -46,8 +93,19 @@ window.addEventListener("DOMContentLoaded", () => {
   const submitBtn = document.getElementById("authSubmit");
   const closeBtn = document.getElementById("authClose");
   const errorMsg = document.getElementById("authError");
+  const togglePasswordBtn = document.getElementById("authTogglePassword");
 
   const DURATION = 180;
+
+  // --- Show/hide password toggle ---
+  if (togglePasswordBtn && accessKeyInput) {
+    togglePasswordBtn.addEventListener("click", () => {
+      const isHidden = accessKeyInput.type === "password";
+      accessKeyInput.type = isHidden ? "text" : "password";
+      togglePasswordBtn.textContent = isHidden ? "Hide" : "Show";
+      togglePasswordBtn.setAttribute("aria-label", isHidden ? "Hide access key" : "Show access key");
+    });
+  }
 
   function showError(msg) {
     if (errorMsg) {
@@ -110,6 +168,11 @@ window.addEventListener("DOMContentLoaded", () => {
         submitBtn.textContent = "Verify";
         usernameInput.value = "";
         accessKeyInput.value = "";
+        if (accessKeyInput) accessKeyInput.type = "password";
+        if (togglePasswordBtn) {
+          togglePasswordBtn.textContent = "Show";
+          togglePasswordBtn.setAttribute("aria-label", "Show access key");
+        }
 
         window.dispatchEvent(new CustomEvent("auth:verified"));
 
@@ -161,6 +224,5 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!inside) closeAnimated();
   });
 
-  // Expose open for other scripts
   window.openAuthModal = open;
 });

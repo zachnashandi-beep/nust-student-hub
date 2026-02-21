@@ -22,12 +22,122 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* ---- Personal page: profile card ---- */
+      .personal-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--accent) 18%, transparent);
+        border: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--accent);
+        flex-shrink: 0;
+      }
+      .personal-profile-name {
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+
+      /* ---- Skeleton loader ---- */
+      .personal-profile-skeleton {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 24px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        margin-bottom: 24px;
+      }
+      .skeleton-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--border);
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+      }
+      .skeleton-lines {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .skeleton-line {
+        height: 14px;
+        border-radius: 6px;
+        background: var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+      .skeleton-line--wide  { width: 60%; }
+      .skeleton-line--mid   { width: 45%; }
+      .skeleton-line--narrow { width: 35%; }
+      .skeleton-card {
+        min-height: 72px;
+      }
+      /* Shimmer sweep on skeleton elements */
+      .skeleton-avatar::after,
+      .skeleton-line::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          color-mix(in srgb, var(--accent) 18%, transparent),
+          transparent
+        );
+        transform: translateX(-100%);
+        animation: skeletonSweep 1.6s ease-in-out infinite;
+      }
+      @keyframes skeletonSweep {
+        0%   { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .skeleton-avatar::after,
+        .skeleton-line::after { animation: none; }
+      }
+
+      /* ---- Show/hide password toggle ---- */
+      .input-with-toggle {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .input-with-toggle input {
+        flex: 1;
+        padding-right: 56px !important;
+      }
+      .input-toggle-btn {
+        position: absolute;
+        right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 4px 6px;
+        border-radius: 6px;
+        transition: color 0.15s;
+        letter-spacing: 0.02em;
+      }
+      .input-toggle-btn:hover { color: var(--text); }
+    </style>
     <link rel="manifest" href="manifest.json" />
     <script defer src="sw-register.js"></script>
     <script defer src="topbar-state.js"></script>
     <script defer src="theme.js"></script>
-    <script defer src="nav.js"></script>
     <script defer src="auth.js"></script>
+    <script defer src="nav.js"></script>
     <script defer src="nav-auth.js"></script>
     <script defer src="personal.js"></script>
   </head>
@@ -100,13 +210,21 @@
 
         <div style="margin:12px 0;">
           <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
-          <input
-            type="password"
-            id="authAccessKey"
-            placeholder="access key"
-            autocomplete="current-password"
-            style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
-          />
+          <div class="input-with-toggle">
+            <input
+              type="password"
+              id="authAccessKey"
+              placeholder="access key"
+              autocomplete="current-password"
+              style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+            />
+            <button
+              type="button"
+              id="authTogglePassword"
+              class="input-toggle-btn"
+              aria-label="Show access key"
+            >Show</button>
+          </div>
         </div>
 
         <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
