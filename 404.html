@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("loading");
+          window.addEventListener("load", function () { document.documentElement.classList.remove("loading"); });
+          var y = window.scrollY || document.documentElement.scrollTop || 0;
+          document.documentElement.dataset._scrollY = String(y);
+          document.documentElement.classList.toggle("at-top", y <= 8);
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — Page Not Found • Student Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script defer src="sw-register.js"></script>
+    <script defer src="topbar-state.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="nav.js"></script>
+    <script defer src="nav-auth.js"></script>
+    <style>
+      .error-page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 60px 20px 80px;
+        min-height: 60vh;
+      }
+
+      .error-code {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(5rem, 18vw, 9rem);
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1;
+        letter-spacing: -0.04em;
+        opacity: 0.18;
+        margin: 0;
+        user-select: none;
+      }
+
+      .error-emoji {
+        font-size: 3rem;
+        margin: -20px 0 12px;
+        animation: errorWobble 2.5s ease-in-out infinite;
+      }
+
+      @keyframes errorWobble {
+        0%, 100% { transform: rotate(-4deg); }
+        50%       { transform: rotate(4deg); }
+      }
+
+      .error-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 0 10px;
+      }
+
+      .error-sub {
+        color: var(--muted);
+        max-width: 380px;
+        line-height: 1.6;
+        margin: 0 0 28px;
+        font-size: 0.95rem;
+      }
+
+      .error-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .error-tip {
+        margin-top: 48px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 22px;
+        max-width: 400px;
+        text-align: left;
+      }
+
+      .error-tip .small-title {
+        margin-bottom: 6px;
+      }
+
+      .error-tip p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      @media (max-width: 500px) {
+        .error-actions {
+          flex-direction: column;
+          width: 100%;
+        }
+        .error-actions .btn {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="container">
+      <header class="topbar">
+        <a class="brand" href="index.html">Student Hub</a>
+        <nav class="nav">
+          <a href="modules.html">Modules</a>
+          <a href="guides.html">Guides</a>
+          <a href="index.html?to=resources">Resources</a>
+          <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+        </nav>
+      </header>
+
+      <main id="main">
+        <div class="error-page">
+          <p class="error-code" aria-hidden="true">404</p>
+          <div class="error-emoji" role="img" aria-label="Confused face">🤔</div>
+          <h1 class="error-title">This page doesn't exist</h1>
+          <p class="error-sub">
+            The URL might be wrong, the page may have moved, or it was never here to begin with.
+            Either way — nothing to see here.
+          </p>
+
+          <div class="error-actions">
+            <a class="btn primary" href="index.html">Go to Home</a>
+            <a class="btn" href="modules.html">Browse Modules</a>
+            <a class="btn" href="guides.html">Read Guides</a>
+          </div>
+
+          <div class="error-tip">
+            <p class="small-title">💡 While you're here</p>
+            <p id="errorTip">If you can't solve a problem without looking at your notes, you've seen it — you haven't learned it yet.</p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer simple">
+        <p class="muted">Not affiliated with NUST. Student-made hub.</p>
+      </footer>
+    </div>
+
+    <script>
+      // Show a random tip on the 404 page
+      const tips = [
+        "If you can't solve a problem without looking at your notes, you've seen it — you haven't learned it yet.",
+        "30 minutes of focused practice every day beats a 5-hour panic session the night before a test.",
+        "Retype code examples yourself instead of copy-pasting. Your brain processes every line when you type it.",
+        "Do past papers under timed conditions at least once before every test. They reveal the pattern.",
+        "Ask questions in week 2, not week 9. Lecturers help students who show up before they're lost.",
+        "Feeling lost in week 1–3 is normal. Focus on your own progress, not what others seem to know.",
+        "When you get a programming error, read the error message first. It usually tells you exactly what's wrong.",
+        "Minimum daily effort compounds faster than you think. Even 45 minutes a day outperforms weekend-only study.",
+        "Studying only when motivated means you'll study less and less. Build a routine instead.",
+        "Being busy and being productive are different. Ask: what did I actually practice in the last hour?",
+      ];
+      const el = document.getElementById("errorTip");
+      if (el) el.textContent = tips[Math.floor(Math.random() * tips.length)];
+    </script>
+  </body>
+</html>

@@ -82,6 +82,28 @@
         </div>
       </main>
 
+      <div class="stats-bar" id="statsBar" aria-label="Site stats">
+        <div class="stat-item">
+          <span class="stat-number" data-target="30">0</span>
+          <span class="stat-label">study tips</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="4">0</span>
+          <span class="stat-label">survival guides</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="5">0</span>
+          <span class="stat-label">modules covered</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="10">0</span>
+          <span class="stat-label">mistakes to avoid</span>
+        </div>
+      </div>
+
       <section class="section" id="start-here">
         <div class="section-head">
           <h2>Start here <span style="font-size:1rem; font-weight:400; color:var(--muted);">— Year 1</span></h2>
@@ -321,8 +343,48 @@
     </div>
 
     <script>
-      // tiny quality-of-life: auto year (optional)
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Animated stat counters — triggers when scrolled into view
+      (function () {
+        const bar = document.getElementById("statsBar");
+        if (!bar) return;
+
+        const numbers = bar.querySelectorAll(".stat-number");
+        let animated = false;
+
+        function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+        function animateCounters() {
+          if (animated) return;
+          animated = true;
+          const duration = 1200;
+          const start = performance.now();
+
+          function tick(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = easeOut(progress);
+            numbers.forEach((el) => {
+              const target = parseInt(el.dataset.target, 10);
+              el.textContent = Math.round(eased * target);
+            });
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+
+        // Use IntersectionObserver so it fires when bar scrolls into view
+        if ("IntersectionObserver" in window) {
+          new IntersectionObserver((entries, obs) => {
+            if (entries[0].isIntersecting) {
+              animateCounters();
+              obs.disconnect();
+            }
+          }, { threshold: 0.4 }).observe(bar);
+        } else {
+          animateCounters(); // fallback
+        }
+      })();
     </script>
   </body>
 </html>
