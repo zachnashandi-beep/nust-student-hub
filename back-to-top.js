@@ -1,11 +1,10 @@
 /**
  * back-to-top.js
- * A small button that appears after scrolling 400px down.
- * Smooth scrolls back to top on click.
- * Injected dynamically — no HTML changes needed per page.
+ * Injects a back-to-top button that appears after scrolling 400px.
+ * Works on all pages automatically.
  */
 (function () {
-  window.addEventListener("DOMContentLoaded", () => {
+  function init() {
     const btn = document.createElement("button");
     btn.id = "backToTop";
     btn.type = "button";
@@ -13,18 +12,25 @@
     btn.innerHTML = "↑";
     document.body.appendChild(btn);
 
-    const THRESHOLD = 400;
-
-    function update() {
-      const y = window.scrollY || document.documentElement.scrollTop || 0;
-      btn.classList.toggle("btt-visible", y > THRESHOLD);
-    }
-
-    window.addEventListener("scroll", update, { passive: true });
-    update();
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          btn.classList.toggle("visible", window.scrollY > 400);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
 
     btn.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();

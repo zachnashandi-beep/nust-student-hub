@@ -903,32 +903,7 @@ dialog.modal.is-closing::backdrop {
   }
 }
 
-@media (max-width: 480px) {
-  body {
-    padding: 100px 14px 50px;
-  }
-
-  .topbar {
-    width: calc(100% - 28px); /* 14px each side */
-  }
-
-  .nav {
-    flex-wrap: wrap;
-    gap: 8px;
-    min-width: 0;
-  }
-
-  .nav a {
-    padding: 8px 10px;
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-
-  .brand {
-    font-size: 0.95rem;
-    white-space: nowrap;
-  }
-}
+/* (mobile nav handled by nav-mobile styles below) */
 
 /* ---------- Reduced motion + performance ---------- */
 @media (prefers-reduced-motion: reduce) {
@@ -1674,4 +1649,254 @@ dialog.modal.is-closing::backdrop {
   }
   .stat-item:last-child,
   .stat-item:nth-last-child(2) { border-bottom: none; }
+}
+
+
+/* ============================================================
+   MOBILE NAV — hamburger + drawer
+   ============================================================ */
+
+/* Hamburger button — hidden on desktop */
+.nav-toggle-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  padding: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 1100;
+  position: relative;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+/* Animate bars to X when open */
+.nav-open .nav-toggle-btn .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-open .nav-toggle-btn .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-open .nav-toggle-btn .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Backdrop */
+.nav-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.nav-backdrop--visible {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  /* Show hamburger */
+  .nav-toggle-btn {
+    display: flex;
+  }
+
+  /* Nav becomes a dropdown drawer below the topbar */
+  .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 10px;
+    z-index: 999;
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+
+    /* Hidden by default */
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  /* Open state */
+  .nav-open .nav {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* Backdrop visible */
+  .nav-backdrop {
+    display: block;
+  }
+
+  /* Nav links fill full width, bigger tap targets */
+  .nav a,
+  .nav-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 1rem;
+    border: 1px solid transparent;
+    text-align: left;
+    box-sizing: border-box;
+  }
+
+  .nav a:hover,
+  .nav-link:hover {
+    background: var(--hover);
+  }
+
+  /* Theme button sits alone at the bottom of the drawer */
+  .theme-btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 4px;
+    border-top: 1px solid var(--border);
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0 0 8px 8px;
+  }
+
+  /* Topbar — keep it tight and single-row */
+  .topbar {
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 10px 14px;
+    position: fixed; /* ensure it stays fixed on iOS */
+  }
+
+  /* Brand stays left, hamburger goes far right */
+  .brand {
+    flex: 1;
+    font-size: 1rem;
+  }
+}
+
+/* Fine-tune for very small screens */
+@media (max-width: 400px) {
+  .topbar {
+    width: calc(100% - 20px);
+    padding: 9px 12px;
+  }
+  .brand {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================================
+   GENERAL MOBILE IMPROVEMENTS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Better body padding for fixed topbar */
+  body {
+    padding-top: 80px;
+  }
+
+  /* Hero stacks cleanly */
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-bottom: 8px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  /* Buttons full width on small screens */
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .buttons .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Guide grid single column */
+  .guide-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stats bar 2x2 on medium mobile */
+  .stat-item {
+    min-width: 80px;
+  }
+
+  /* Cards better padding */
+  .card {
+    padding: 14px;
+  }
+
+  /* Modules page */
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Back to top button (for all pages) */
+#backToTop {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+#backToTop.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+#backToTop:hover {
+  filter: brightness(1.12);
 }
