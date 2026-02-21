@@ -32,7 +32,7 @@ html {
   background: var(--bg);
   background-color: var(--bg);
   overscroll-behavior: none;
-  scroll-behavior: smooth;
+  /* Remove smooth scroll from html — handled per-element to avoid mobile jank */
 }
 
 body {
@@ -43,6 +43,9 @@ body {
   overflow-y: auto;
   background: var(--bg);
   background-color: var(--bg);
+  overscroll-behavior-y: none;
+  /* Hint to browser: promote to its own layer for smoother compositing */
+  -webkit-overflow-scrolling: touch;
 }
 
 ::view-transition-old(root),
@@ -52,6 +55,28 @@ body {
 }
 
 /* Transitions only on interactive elements (global * caused scroll lag) */
+
+/* ============================================================
+   SCROLL PERFORMANCE — GPU layer hints
+   Fixed elements get their own compositor layer so they never
+   block or interrupt the main scroll thread.
+   ============================================================ */
+
+.topbar,
+#backToTop,
+.nav-backdrop,
+dialog.modal {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Smooth scroll only on anchor/hash navigation, not the whole document */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 /* ---------- Skip link ---------- */
 .skip-link {

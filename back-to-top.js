@@ -41,7 +41,7 @@
     btn.addEventListener("touchend", (e) => {
       e.preventDefault();
       scrollToTop();
-    });
+    }, { passive: false });
 
     update();
     window.addEventListener("pageshow", update);
