@@ -142,6 +142,13 @@ a:hover {
   font-size: 1.15rem;
 }
 
+/* Remove 300ms tap delay on all interactive elements */
+a, button, [role="button"], input, select, textarea, label,
+.tile, .guide-card, .update-item, .tab, .module-tab,
+.dropdown summary, .module-resource-link {
+  touch-action: manipulation;
+}
+
 /* Noto Emoji images — size controlled by width/height attrs, no distortion */
 .noto-emoji {
   display: inline-block;
@@ -1771,36 +1778,43 @@ dialog.modal.is-closing::backdrop {
   }
 
   /*
-   * Nav drawer — glass effect isolated here only.
-   * Using will-change: transform puts this on its own GPU layer,
-   * so the blur composites independently and doesn't touch the scroll layer.
+   * Nav drawer — true iOS frosted glass.
+   * Isolated on its own GPU layer so blur doesn't affect page scroll.
    */
   .nav {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 2px;
+    gap: 0;
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 10px);
     left: 0;
     right: 0;
     z-index: 999;
-    padding: 8px;
-    border-radius: 16px;
-    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+    padding: 6px;
+    border-radius: 20px;
 
-    /* Glass effect */
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    /* Frosted glass — dark mode */
+    background: color-mix(in srgb, var(--bg) 75%, transparent);
+    backdrop-filter: blur(48px) saturate(180%) brightness(1.1);
+    -webkit-backdrop-filter: blur(48px) saturate(180%) brightness(1.1);
 
-    /* Isolate on its own GPU layer — prevents blur from affecting scroll */
+    /* Subtle inner highlight + outer border */
+    border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+    box-shadow:
+      0 0 0 0.5px color-mix(in srgb, var(--text) 6%, transparent),
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+
+    /* Spring-like open animation */
     will-change: transform, opacity;
-    transform: translateY(-10px) scale(0.97);
+    transform: translateY(-8px) scale(0.96);
     transform-origin: top center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .nav-open .nav {
@@ -1809,46 +1823,101 @@ dialog.modal.is-closing::backdrop {
     pointer-events: auto;
   }
 
-  .nav-backdrop {
-    display: block;
+  /* Light mode glass */
+  html[data-theme="light"] .nav {
+    background: color-mix(in srgb, var(--bg2) 80%, transparent);
+    box-shadow:
+      0 0 0 0.5px color-mix(in srgb, var(--text) 8%, transparent),
+      0 8px 32px rgba(0, 0, 0, 0.12),
+      0 2px 8px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
 
-  /* Full-width tap targets — minimum 48px height for comfort */
+  .nav-backdrop {
+    display: block;
+    /* Soft backdrop blur only when menu is open — isolated from scroll */
+    transition: opacity 0.22s ease, backdrop-filter 0.22s ease;
+  }
+
+  .nav-backdrop--visible {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  /* Nav items — grouped rows */
   .nav a,
   .nav-link {
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 48px;
-    padding: 12px 16px;
-    border-radius: 10px;
+    min-height: 50px;
+    padding: 13px 16px;
+    border-radius: 14px;
     font-size: 1rem;
-    border: 1px solid transparent;
+    font-weight: 500;
+    border: none;
     text-align: left;
     box-sizing: border-box;
+    color: var(--text);
     -webkit-tap-highlight-color: transparent;
+    transition: background 0.12s ease;
+    position: relative;
+  }
+
+  /* Separator lines between items (not after last, not before theme btn) */
+  .nav a + a::before,
+  .nav a + button.nav-link::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 16px;
+    height: 1px;
+    background: color-mix(in srgb, var(--text) 7%, transparent);
   }
 
   .nav a:active,
   .nav-link:active {
-    background: var(--hover);
+    background: color-mix(in srgb, var(--text) 10%, transparent);
   }
 
-  /* Divider line above theme toggle */
+  /* Active nav link */
+  .nav a.active {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  /* Theme toggle — separated at bottom */
   .theme-btn {
     display: flex;
-    width: 100%;
+    align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    width: 100%;
+    min-height: 46px;
+    border-radius: 14px;
     padding: 12px;
-    margin-top: 2px;
-    border-top: 1px solid var(--border);
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-bottom: 1px solid transparent;
+    margin-top: 4px;
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+    border: none;
+    position: relative;
   }
 
-  /* Topbar single row, no wrapping */
+  .theme-btn::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 6px;
+    right: 6px;
+    height: 1px;
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+
+  .theme-btn:active {
+    background: color-mix(in srgb, var(--text) 12%, transparent);
+  }
+
+  /* Topbar single row */
   .topbar {
     flex-wrap: nowrap;
     align-items: center;
