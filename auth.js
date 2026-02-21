@@ -53,6 +53,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (errorMsg) {
       errorMsg.textContent = msg || "";
       errorMsg.style.display = msg ? "block" : "none";
+      errorMsg.style.color = "#ff6b6b";
     }
   }
 
@@ -72,12 +73,20 @@ window.addEventListener("DOMContentLoaded", () => {
     }, DURATION);
   }
 
+  function showSuccess(msg) {
+    if (errorMsg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = "block";
+      errorMsg.style.color = "var(--accent)";
+    }
+  }
+
   async function handleSubmit() {
     const username = (usernameInput?.value || "").trim();
     const accessKey = (accessKeyInput?.value || "").trim();
 
     if (!username || !accessKey) {
-      showError("Please enter both username and access key");
+      showError("Please fill in both fields.");
       return;
     }
 
@@ -96,19 +105,31 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (data.ok && data.token) {
         window.Auth.setToken(data.token);
-        closeAnimated();
+        showSuccess("Verified ✓");
         submitBtn.disabled = false;
         submitBtn.textContent = "Verify";
         usernameInput.value = "";
         accessKeyInput.value = "";
 
-        // Dispatch event so other scripts can refresh
         window.dispatchEvent(new CustomEvent("auth:verified"));
-        if (window.location.pathname.includes("personal.html")) {
-          window.location.reload();
-        }
+
+        setTimeout(() => {
+          closeAnimated();
+          if (window.location.pathname.includes("personal.html")) {
+            window.location.reload();
+          }
+        }, 400);
       } else {
-        showError(data.error || "Verification failed");
+        const reason = data.reason || data.error;
+        const msg =
+          reason === "invalid_credentials"
+            ? "Incorrect username or access key."
+            : reason === "missing_fields"
+              ? "Please fill in both fields."
+              : reason === "missing_env_vars"
+                ? "Server setup issue. Try again later."
+                : "Verification failed.";
+        showError(msg);
         submitBtn.disabled = false;
         submitBtn.textContent = "Verify";
       }
