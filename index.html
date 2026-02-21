@@ -23,6 +23,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <link rel="manifest" href="manifest.json" />
+    <script defer src="tip-of-day.js"></script>
+    <script defer src="page-transitions.js"></script>
+    <script defer src="back-to-top.js"></script>
     <script defer src="sw-register.js"></script>
     <script defer src="topbar-state.js"></script>
     <script defer src="theme.js"></script>
@@ -69,16 +72,13 @@
           </div>
         </div>
 
-        <div class="hero-card">
-          <p class="small-title">Quick Start</p>
-          <ul class="quick">
-            <li>✅ Pick a module</li>
-            <li>✅ Open a week/topic</li>
-            <li>✅ Use links + summaries</li>
-          </ul>
-          <p class="muted">
-            (You'll add photos and real links later — this is just the structure.)
-          </p>
+        <div class="hero-card tip-card" id="tipCard">
+          <div class="tip-header">
+            <p class="small-title">💡 Tip of the day</p>
+            <button class="tip-shuffle-btn" id="tipShuffle" type="button" aria-label="Show another tip" title="Another tip">↻</button>
+          </div>
+          <p class="tip-text" id="tipText"></p>
+          <p class="tip-meta muted" id="tipMeta"></p>
         </div>
       </main>
 

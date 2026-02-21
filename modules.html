@@ -27,6 +27,8 @@
     <script defer src="topbar-state.js"></script>
     <script defer src="theme.js"></script>
     <script defer src="nav.js"></script>
+    <script defer src="page-transitions.js"></script>
+    <script defer src="back-to-top.js"></script>
     <script defer src="modules-data.js"></script>
     <script defer src="command-palette.js"></script>
     <script defer src="auth.js"></script>
@@ -162,6 +164,12 @@
         const mount = document.getElementById("modulesMountY1");
         if (!mount) return;
 
+        function escapeHtml(s) {
+          const div = document.createElement("div");
+          div.textContent = s;
+          return div.innerHTML;
+        }
+
         data.y1.forEach((mod, index) => {
           const details = document.createElement("details");
           details.className = "dropdown";
@@ -171,6 +179,7 @@
           details.dataset.moduleTitle = titleMatch ? titleMatch[1] : (mod.title.trim() || mod.id);
           if (index === 0) details.open = true;
 
+          // --- Summary row ---
           const summary = document.createElement("summary");
           summary.innerHTML =
             "<span class=\"module-title\">" + escapeHtml(mod.title) + "</span>" +
@@ -179,17 +188,69 @@
             (mod.chips && mod.chips.length ? "<span class=\"chips\">" + mod.chips.map(function (c) { return "<span class=\"chip\">" + escapeHtml(c) + "</span>"; }).join(" ") + "</span>" : "");
           details.appendChild(summary);
 
+          // --- Content area ---
           const content = document.createElement("div");
           content.className = "content";
+
+          // --- Tab bar (Weeks | Resources) ---
+          const tabBar = document.createElement("div");
+          tabBar.className = "module-tabs";
+          const weeksTabBtn = document.createElement("button");
+          weeksTabBtn.type = "button";
+          weeksTabBtn.className = "module-tab active";
+          weeksTabBtn.textContent = "Weeks";
+          const resourcesTabBtn = document.createElement("button");
+          resourcesTabBtn.type = "button";
+          resourcesTabBtn.className = "module-tab";
+          resourcesTabBtn.textContent = "Resources";
+          if (mod.resources && mod.resources.length) {
+            resourcesTabBtn.innerHTML += " <span class=\"module-tab-count\">" + mod.resources.length + "</span>";
+          }
+          tabBar.appendChild(weeksTabBtn);
+          tabBar.appendChild(resourcesTabBtn);
+          content.appendChild(tabBar);
+
+          // --- Weeks panel ---
+          const weeksPanel = document.createElement("div");
+          weeksPanel.className = "module-panel module-panel--weeks";
           const ul = document.createElement("ul");
           ul.className = "links";
           (mod.weeks || []).forEach(function (w) {
             const li = document.createElement("li");
             li.dataset.weekId = w.weekId;
+
+            const weekHeader = document.createElement("div");
+            weekHeader.className = "week-header";
             const a = document.createElement("a");
             a.href = w.href || "#";
             a.textContent = w.label;
-            li.appendChild(a);
+            weekHeader.appendChild(a);
+            li.appendChild(weekHeader);
+
+            // Topics and summary if present
+            if (w.summary || (w.topics && w.topics.length)) {
+              const meta = document.createElement("div");
+              meta.className = "week-meta";
+              if (w.summary) {
+                const s = document.createElement("p");
+                s.className = "week-summary muted";
+                s.textContent = w.summary;
+                meta.appendChild(s);
+              }
+              if (w.topics && w.topics.length) {
+                const topicList = document.createElement("ul");
+                topicList.className = "week-topics";
+                w.topics.forEach(function (t) {
+                  const tli = document.createElement("li");
+                  tli.textContent = t;
+                  topicList.appendChild(tli);
+                });
+                meta.appendChild(topicList);
+              }
+              li.appendChild(meta);
+            }
+
+            // Checklist
             const checkWrap = document.createElement("div");
             checkWrap.className = "week-checklist";
             checklistItems.forEach(function (item) {
@@ -204,16 +265,48 @@
             li.appendChild(checkWrap);
             ul.appendChild(li);
           });
-          content.appendChild(ul);
+          weeksPanel.appendChild(ul);
+          content.appendChild(weeksPanel);
+
+          // --- Resources panel ---
+          const resourcesPanel = document.createElement("div");
+          resourcesPanel.className = "module-panel module-panel--resources";
+          resourcesPanel.hidden = true;
+          if (mod.resources && mod.resources.length) {
+            const resGrid = document.createElement("div");
+            resGrid.className = "module-resources-grid";
+            mod.resources.forEach(function (r) {
+              const a = document.createElement("a");
+              a.href = r.href || "#";
+              a.className = "module-resource-link";
+              a.target = "_blank";
+              a.rel = "noopener";
+              a.innerHTML = "<span class=\"module-resource-icon\">" + (r.icon || "🔗") + "</span><span>" + escapeHtml(r.label) + "</span>";
+              resGrid.appendChild(a);
+            });
+            resourcesPanel.appendChild(resGrid);
+          } else {
+            resourcesPanel.innerHTML = "<p class=\"muted\" style=\"padding:12px 0;\">No resources added yet for this module.</p>";
+          }
+          content.appendChild(resourcesPanel);
+
+          // Tab switching logic
+          weeksTabBtn.addEventListener("click", () => {
+            weeksTabBtn.classList.add("active");
+            resourcesTabBtn.classList.remove("active");
+            weeksPanel.hidden = false;
+            resourcesPanel.hidden = true;
+          });
+          resourcesTabBtn.addEventListener("click", () => {
+            resourcesTabBtn.classList.add("active");
+            weeksTabBtn.classList.remove("active");
+            weeksPanel.hidden = true;
+            resourcesPanel.hidden = false;
+          });
+
           details.appendChild(content);
           mount.appendChild(details);
         });
-
-        function escapeHtml(s) {
-          const div = document.createElement("div");
-          div.textContent = s;
-          return div.innerHTML;
-        }
       })();
 
       const search = document.getElementById("moduleSearch");

@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = "student-hub-v5"; // <-- bump this on every deployment
+const CACHE_NAME = "student-hub-v7"; // <-- bump this on every deployment
 
 const ASSETS = [
   "./",
@@ -29,6 +29,30 @@ const ASSETS = [
   "./contact.js",
   "./deep-link.js",
   "./theme.js",
+  "./tip-of-day.js",
+  "./page-transitions.js",
+  "./back-to-top.js",
+  "./sw-register.js",
+];
+
+  "./style.css",
+  "./manifest.json",
+
+  "./nav.js",
+  "./nav-auth.js",
+  "./auth.js",
+  "./personal.js",
+  "./personal-inject.js",
+  "./modules-data.js",
+  "./updates.js",
+  "./topbar-state.js",
+  "./active-section.js",
+  "./anchor-highlight.js",
+  "./command-palette.js",
+  "./contact.js",
+  "./deep-link.js",
+  "./theme.js",
+  "./tip-of-day.js",
   "./sw-register.js",
 ];
 

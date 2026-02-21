@@ -1325,3 +1325,270 @@ dialog.modal.is-closing::backdrop {
     text-align: center;
   }
 }
+
+
+/* ============================================================
+   TIP OF THE DAY — hero card variant
+   ============================================================ */
+
+.tip-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 140px;
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tip-shuffle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, border-color 0.15s, transform 0.15s;
+  flex-shrink: 0;
+}
+.tip-shuffle-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+@keyframes tipSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.tip-spin {
+  animation: tipSpin 0.4s ease;
+}
+
+.tip-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  flex: 1;
+  color: var(--text);
+}
+
+.tip-meta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+/* Fade transitions */
+.tip-fade-out {
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+.tip-fade-in {
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+
+/* ============================================================
+   PAGE TRANSITIONS — View Transitions API
+   ============================================================ */
+
+@keyframes vt-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes vt-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+::view-transition-old(root) {
+  animation: vt-fade-out 180ms ease forwards;
+}
+::view-transition-new(root) {
+  animation: vt-fade-in 220ms ease forwards;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+
+/* ============================================================
+   BACK TO TOP BUTTON
+   ============================================================ */
+
+#backToTop {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  z-index: 900;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.22s ease, transform 0.22s ease, color 0.15s, border-color 0.15s;
+  backdrop-filter: blur(8px);
+}
+#backToTop.btt-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+#backToTop:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  #backToTop { transition: none; }
+}
+
+
+/* ============================================================
+   MODULE TABS (Weeks | Resources)
+   ============================================================ */
+
+.module-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 10px 14px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+
+.module-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 6px 12px 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.module-tab:hover { color: var(--text); }
+.module-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.module-tab-count {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+  border-radius: 10px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.module-panel {
+  padding: 4px 0;
+}
+
+
+/* ============================================================
+   WEEK META — summary + topics inside each week row
+   ============================================================ */
+
+.week-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.week-meta {
+  margin: 6px 0 8px 0;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+  border-radius: 8px;
+  border-left: 2px solid var(--border);
+}
+
+.week-summary {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.week-topics {
+  margin: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  list-style: disc;
+}
+.week-topics li {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   MODULE RESOURCES GRID
+   ============================================================ */
+
+.module-resources-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 4px;
+}
+
+.module-resource-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.module-resource-link:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  transform: translateX(3px);
+  color: var(--accent);
+}
+.module-resource-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
