@@ -18,6 +18,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
     <title>Student Hub</title>
+    <meta name="description" content="Notes, weekly breakdowns, and resources for NUST CS students — MCI, PRG, DBF, DTN, and ISS." />
+    <meta property="og:title" content="Student Hub — NUST CS" />
+    <meta property="og:description" content="Notes, weekly breakdowns, and resources for NUST CS students." />
+    <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
@@ -40,8 +44,7 @@
     <script defer src="command-palette.js"></script>
     <script defer src="auth.js"></script>
     <script defer src="nav-auth.js"></script>
-      <script defer src="nav-mobile.js"></script>
-    <script defer src="back-to-top.js"></script>
+    <script defer src="nav-mobile.js"></script>
   </head>
 
   <body>
@@ -89,22 +92,22 @@
 
       <div class="stats-bar" id="statsBar" aria-label="Site stats">
         <div class="stat-item">
-          <span class="stat-number" data-target="30">0</span>
+          <span class="stat-number" data-target="30" data-stat="tips">0</span>
           <span class="stat-label">study tips</span>
         </div>
         <div class="stat-divider" aria-hidden="true"></div>
         <div class="stat-item">
-          <span class="stat-number" data-target="4">0</span>
+          <span class="stat-number" data-target="4" data-stat="guides">0</span>
           <span class="stat-label">survival guides</span>
         </div>
         <div class="stat-divider" aria-hidden="true"></div>
         <div class="stat-item">
-          <span class="stat-number" data-target="5">0</span>
+          <span class="stat-number" data-target="5" data-stat="modules">0</span>
           <span class="stat-label">modules covered</span>
         </div>
         <div class="stat-divider" aria-hidden="true"></div>
         <div class="stat-item">
-          <span class="stat-number" data-target="10">0</span>
+          <span class="stat-number" data-target="10" data-stat="mistakes">0</span>
           <span class="stat-label">mistakes to avoid</span>
         </div>
       </div>
@@ -338,7 +341,9 @@
           <div>
             <p class="footer-title">Pages</p>
             <a href="index.html">Home</a><br />
-            <a href="modules.html">Modules</a>
+            <a href="modules.html">Modules</a><br />
+            <a href="guides.html">Guides</a><br />
+            <a href="personal.html">Personal</a>
           </div>
         </div>
 
@@ -351,9 +356,29 @@
       document.getElementById("year").textContent = new Date().getFullYear();
 
       // Animated stat counters — triggers when scrolled into view
+      // Targets are set dynamically from live data where possible.
       (function () {
         const bar = document.getElementById("statsBar");
         if (!bar) return;
+
+        // --- Dynamic count updates ---
+        // 1. Study tips: count from window.TIPS (set by tip-of-day.js)
+        // 2. Modules: count from window.MODULES_DATA.y1
+        // 3. Guides & mistakes are static HTML counts (4 guides, 10 mistakes)
+        function updateDynamicTargets() {
+          const numbers = bar.querySelectorAll(".stat-number");
+          numbers.forEach((el) => {
+            const type = el.dataset.stat;
+            if (type === "tips" && window.TIPS) {
+              el.dataset.target = String(window.TIPS.length);
+            } else if (type === "modules" && window.MODULES_DATA && window.MODULES_DATA.y1) {
+              el.dataset.target = String(window.MODULES_DATA.y1.length);
+            }
+          });
+        }
+
+        // Wait briefly for deferred scripts to load, then update
+        window.addEventListener("load", updateDynamicTargets);
 
         const numbers = bar.querySelectorAll(".stat-number");
         let animated = false;
@@ -362,6 +387,7 @@
 
         function animateCounters() {
           if (animated) return;
+          updateDynamicTargets();
           animated = true;
           const duration = 1200;
           const start = performance.now();
@@ -388,6 +414,8 @@
           }, { threshold: 0.4 }).observe(bar);
         } else {
           animateCounters(); // fallback
+        }
+      })();
         }
       })();
     </script>

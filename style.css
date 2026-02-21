@@ -194,7 +194,7 @@ html.at-top .topbar.blur-ready:not(.scrolling) {
 }
 
 .brand {
-  font-weight: 750;
+  font-weight: 700;
   font-size: 1.1rem;
   color: var(--text);
 }
@@ -265,6 +265,17 @@ html.at-top .topbar.blur-ready:not(.scrolling) {
   margin-bottom: 40px;
 }
 
+/* Prevent grid children from overflowing their columns */
+.hero > * {
+  min-width: 0;
+}
+
+.hero-text {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 .hero h1 {
   font-size: clamp(2.1rem, 4vw, 3.2rem);
   margin: 0 0 10px;
@@ -323,7 +334,7 @@ html.at-top .topbar.blur-ready:not(.scrolling) {
 
 .small-title {
   margin: 0 0 10px;
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .quick {
@@ -1263,10 +1274,18 @@ dialog.modal.is-closing::backdrop {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 .input-with-toggle input {
   flex: 1;
+  min-width: 0;
   padding-right: 56px !important;
+  box-sizing: border-box;
+}
+/* Apply consistent box-sizing to all modal inputs */
+.modal input[type="text"],
+.modal input[type="password"] {
+  box-sizing: border-box;
 }
 .input-toggle-btn {
   position: absolute;
@@ -1412,34 +1431,46 @@ dialog.modal.is-closing::backdrop {
 
 #backToTop {
   position: fixed;
-  bottom: 28px;
-  right: 24px;
-  z-index: 900;
-  width: 40px;
-  height: 40px;
+  bottom: 24px;
+  right: 20px;
+  z-index: 1050; /* above mobile nav backdrop */
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 1.1rem;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-size: 1.15rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(10px);
-  transition: opacity 0.22s ease, transform 0.22s ease, color 0.15s, border-color 0.15s;
-  backdrop-filter: blur(8px);
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 40%, transparent);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  will-change: opacity, transform;
 }
+/* Extended touch target on mobile */
+#backToTop::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+/* JS adds .btt-visible when scrolled down */
 #backToTop.btt-visible {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
 }
 #backToTop:hover {
-  color: var(--accent);
-  border-color: var(--accent);
+  filter: brightness(1.12);
+}
+#backToTop:active {
+  transform: scale(0.93);
 }
 @media (prefers-reduced-motion: reduce) {
   #backToTop { transition: none; }
@@ -1856,53 +1887,6 @@ dialog.modal.is-closing::backdrop {
   .grid       { grid-template-columns: 1fr; }
 }
 
-/* ============================================================
-   BACK TO TOP — iOS Safari & Android robust
-   ============================================================ */
-
-#backToTop {
-  position: fixed;
-  bottom: 24px;
-  right: 20px;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  font-size: 1.15rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050; /* above backdrop */
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 40%, transparent);
-  /* Larger touch target without changing visual size */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  will-change: opacity, transform;
-}
-/* Extend tap target on mobile */
-#backToTop::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-}
-#backToTop.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-#backToTop:hover {
-  filter: brightness(1.12);
-}
-#backToTop:active {
-  transform: scale(0.93);
-}
 
 
 /* ============================================================

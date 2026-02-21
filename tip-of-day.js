@@ -6,7 +6,7 @@
  * - Tip index stored in sessionStorage so shuffle persists within a tab session
  */
 
-const TIPS = [
+const TIPS = window.TIPS = [
   { text: "If you can't solve a problem without looking at your notes, you've seen it — you haven't learned it yet.", tag: "Study method" },
   { text: "Retype code examples yourself instead of copy-pasting. The act of typing forces your brain to process every line.", tag: "Programming" },
   { text: "Do past papers under timed conditions at least once before every test. They show you the pattern, not just the content.", tag: "Exam prep" },

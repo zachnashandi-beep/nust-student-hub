@@ -30,7 +30,8 @@
     document.body.appendChild(btn);
 
     function update() {
-      btn.classList.toggle("visible", getScrollY() > 400);
+      const show = getScrollY() > 400;
+      btn.classList.toggle("btt-visible", show);
     }
 
     window.addEventListener("scroll", update, { passive: true });

@@ -18,6 +18,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
     <title>Modules • Student Hub</title>
+    <meta name="description" content="Expand weeks, topics, and links for MCI, PRG, DBF, DTN, and ISS." />
+    <meta property="og:title" content="Modules — NUST CS Student Hub" />
+    <meta property="og:description" content="Expand weeks, topics, and links for MCI, PRG, DBF, DTN, and ISS." />
+    <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
@@ -31,12 +35,12 @@
     <script defer src="back-to-top.js"></script>
     <script defer src="modules-data.js"></script>
     <script defer src="command-palette.js"></script>
+    <script defer src="contact.js"></script>
     <script defer src="auth.js"></script>
     <script defer src="nav-auth.js"></script>
     <script defer src="personal-inject.js"></script>
-      <script defer src="icons.js"></script>
+    <script defer src="icons.js"></script>
     <script defer src="nav-mobile.js"></script>
-    <script defer src="back-to-top.js"></script>
   </head>
 
   <body>
@@ -47,8 +51,9 @@
 
         <nav class="nav">
           <a class="active" href="modules.html">Modules</a>
+          <a href="guides.html">Guides</a>
           <a href="index.html?to=resources">Resources</a>
-          <a href="index.html?contact=1">Contact</a>
+          <button class="nav-link" id="contactOpen" type="button">Contact</button>
 
           <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme"><span data-icon="moon" data-icon-size="18"></span></button>
         </nav>
@@ -105,6 +110,41 @@
       </footer>
     </div>
 
+    <dialog class="modal" id="contactModal">
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div>
+            <p class="modal-date">Contact</p>
+            <h3 class="modal-title">Get in touch</h3>
+          </div>
+          <button class="modal-close" type="button" id="contactClose" aria-label="Close">✕</button>
+        </div>
+
+        <p class="modal-body">
+          Found a broken link, want to add past papers, or have a suggestion?
+        </p>
+
+        <div class="card" style="padding:12px; margin:12px 0;">
+          <p style="margin:0 0 6px;"><strong>Email</strong></p>
+          <a href="mailto:zachapp.team@gmail.com?subject=Student%20Hub%20Suggestion%20or%20Report" id="contactEmail">
+            zachapp.team@gmail.com
+          </a>
+          <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+        </div>
+
+        <p class="muted" style="margin:12px 0 0; text-align:center;">
+          Maintained by Zach<br />
+          <span style="font-size:0.9rem;">Student Hub Project</span>
+        </p>
+
+        <div class="modal-actions contact-actions">
+          <a class="btn primary" href="#" target="_blank" rel="noopener" id="suggestLink">Suggest a resource</a>
+          <a class="btn" href="#" target="_blank" rel="noopener" id="reportLink">Report broken link</a>
+          <a class="btn" href="#" target="_blank" rel="noopener" id="communityLink">Community (Discord)</a>
+        </div>
+      </div>
+    </dialog>
+
     <!-- Verification Modal -->
     <dialog class="modal" id="authModal">
       <div class="modal-inner">
@@ -133,13 +173,16 @@
 
         <div style="margin:12px 0;">
           <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
-          <input
-            type="password"
-            id="authAccessKey"
-            placeholder="access key"
-            autocomplete="current-password"
-            style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
-          />
+          <div class="input-with-toggle">
+            <input
+              type="password"
+              id="authAccessKey"
+              placeholder="access key"
+              autocomplete="current-password"
+              style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
+            />
+            <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
+          </div>
         </div>
 
         <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
