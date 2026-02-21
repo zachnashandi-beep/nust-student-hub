@@ -4,11 +4,18 @@
     <script>
       (function () {
         try {
+          // Apply saved theme IMMEDIATELY before first paint — prevents flash
+          var t = localStorage.getItem("theme");
+          if (t) {
+            document.documentElement.setAttribute("data-theme", t);
+          } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+            document.documentElement.setAttribute("data-theme", "light");
+          }
+          // Loading state + scroll position
           document.documentElement.classList.add("loading");
           window.addEventListener("load", function () {
             document.documentElement.classList.remove("loading");
           });
-
           var y = window.scrollY || document.documentElement.scrollTop || 0;
           document.documentElement.dataset._scrollY = String(y);
           document.documentElement.classList.toggle("at-top", y <= 8);
@@ -125,12 +132,9 @@
           Found a broken link, want to add past papers, or have a suggestion?
         </p>
 
-        <div class="card" style="padding:12px; margin:12px 0;">
-          <p style="margin:0 0 6px;"><strong>Email</strong></p>
-          <a href="mailto:zachapp.team@gmail.com?subject=Student%20Hub%20Suggestion%20or%20Report" id="contactEmail">
-            zachapp.team@gmail.com
-          </a>
-          <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+        <div class="card" style="padding:12px; margin:12px 0; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <p style="margin:0; color:var(--muted); font-size:0.9rem;">Click to copy email address</p>
+          <button class="btn primary" type="button" id="copyEmail">Copy email</button>
         </div>
 
         <p class="muted" style="margin:12px 0 0; text-align:center;">
@@ -421,13 +425,13 @@
       const label = document.getElementById("continueLabel");
       const continueBtn = document.getElementById("continueBtn");
 
-      function saveLastOpened(moduleId, moduleTitle, linkText, href) {
+      function saveLastOpened(moduleId, moduleTitle, weekId, weekLabel) {
         try {
           localStorage.setItem(CONTINUE_KEY, JSON.stringify({
             moduleId,
             moduleTitle: moduleTitle || moduleId,
-            linkText: linkText || "",
-            href: href || "#"
+            weekId: weekId || "",
+            weekLabel: weekLabel || ""
           }));
         } catch (e) {}
       }
@@ -437,8 +441,11 @@
           const raw = localStorage.getItem(CONTINUE_KEY);
           const data = raw ? JSON.parse(raw) : null;
           if (!data || !data.moduleId) return;
-          label.textContent = data.moduleTitle + (data.linkText ? " → " + data.linkText : "");
-          continueBtn.href = "#" + (data.moduleId ? "module-" + data.moduleId : "");
+          // Show "MCI → Week 4 — K-Maps" if we have a week, otherwise just module
+          const display = data.moduleTitle + (data.weekLabel ? " → " + data.weekLabel : "");
+          label.textContent = display;
+          continueBtn.href = "#module-" + data.moduleId;
+          continueBtn.dataset.weekId = data.weekId || "";
           card.hidden = false;
         } catch (e) {}
       }
@@ -447,12 +454,27 @@
 
       continueBtn.addEventListener("click", (e) => {
         const hash = continueBtn.getAttribute("href") || "";
-        const id = hash.replace("#", "");
-        if (id) {
-          const details = document.getElementById(id);
+        const moduleId = hash.replace("#", "");
+        const weekId = continueBtn.dataset.weekId;
+        if (moduleId) {
+          const details = document.getElementById(moduleId);
           if (details) {
             details.open = true;
-            details.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            // Small delay so details opens before we scroll to week
+            setTimeout(() => {
+              if (weekId) {
+                const weekEl = details.querySelector(`[data-week-id="${weekId}"]`);
+                if (weekEl) {
+                  weekEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                  // Briefly highlight the week
+                  weekEl.style.transition = "background 0.3s ease";
+                  weekEl.style.background = "color-mix(in srgb, var(--accent) 10%, transparent)";
+                  setTimeout(() => { weekEl.style.background = ""; }, 1200);
+                  return;
+                }
+              }
+              details.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }, 80);
           }
         }
       });
@@ -462,21 +484,21 @@
           if (d.open) {
             const id = d.dataset.moduleId;
             const title = d.dataset.moduleTitle || d.querySelector(".module-title")?.textContent?.trim() || id;
-            saveLastOpened(id, title, "", "#");
+            saveLastOpened(id, title, "", "");
             showContinueCard();
           }
         });
       });
 
       document.querySelectorAll(".links a").forEach((a) => {
-        a.addEventListener("click", (e) => {
+        a.addEventListener("click", () => {
           const li = a.closest("li");
           const details = a.closest(".dropdown");
           const moduleId = details?.dataset?.moduleId;
           const moduleTitle = details?.dataset?.moduleTitle || details?.querySelector(".module-title")?.textContent?.trim();
-          const linkText = a.textContent.trim();
-          const href = a.getAttribute("href") || "#";
-          saveLastOpened(moduleId, moduleTitle, linkText, href);
+          const weekId = li?.dataset?.weekId || "";
+          const weekLabel = a.textContent.trim();
+          saveLastOpened(moduleId, moduleTitle, weekId, weekLabel);
           showContinueCard();
         });
       });

@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = "student-hub-v12"; // <-- bump this on every deployment
+const CACHE_NAME = "student-hub-v13"; // <-- bump this on every deployment
 
 const ASSETS = [
   "./",
@@ -12,6 +12,7 @@ const ASSETS = [
   "./guide-weekly.html",
   "./guide-mistakes.html",
   "./404.html",
+  "./offline.html",
 
   "./style.css",
   "./manifest.json",
@@ -54,7 +55,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Cache-first for same-origin assets
+// Cache-first for same-origin assets, offline fallback for page navigations
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
@@ -69,12 +70,20 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
+
       return fetch(event.request).then((res) => {
         if (res.ok && url.origin === self.location.origin) {
           const copy = res.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
         }
         return res;
+      }).catch(() => {
+        // Network failed — serve offline page for navigation requests (HTML pages)
+        if (event.request.mode === "navigate") {
+          return caches.match("./offline.html");
+        }
+        // For other assets (CSS, JS, images) just fail silently
+        return new Response("", { status: 408 });
       });
     })
   );

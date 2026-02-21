@@ -57,13 +57,25 @@ window.addEventListener("DOMContentLoaded", () => {
     closeAnimated();
   });
 
+  const CONTACT_EMAIL = "zachapp.team@gmail.com";
+
   copyBtn?.addEventListener("click", async () => {
-    const email = (emailEl?.textContent || "").trim();
-    if (!email) return;
     try {
-      await navigator.clipboard.writeText(email);
-      copyBtn.textContent = "Copied!";
-      setTimeout(() => (copyBtn.textContent = "Copy"), 900);
-    } catch {}
+      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      copyBtn.textContent = "Copied! ✓";
+      copyBtn.style.background = "rgba(122,162,255,0.25)";
+      setTimeout(() => {
+        copyBtn.textContent = "Copy email";
+        copyBtn.style.background = "";
+      }, 2000);
+    } catch {
+      // Fallback for browsers that block clipboard without interaction
+      copyBtn.textContent = CONTACT_EMAIL;
+      copyBtn.style.fontSize = "0.78rem";
+      setTimeout(() => {
+        copyBtn.textContent = "Copy email";
+        copyBtn.style.fontSize = "";
+      }, 3000);
+    }
   });
 });

@@ -4,11 +4,18 @@
     <script>
       (function () {
         try {
+          // Apply saved theme IMMEDIATELY before first paint — prevents flash
+          var t = localStorage.getItem("theme");
+          if (t) {
+            document.documentElement.setAttribute("data-theme", t);
+          } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+            document.documentElement.setAttribute("data-theme", "light");
+          }
+          // Loading state + scroll position
           document.documentElement.classList.add("loading");
           window.addEventListener("load", function () {
             document.documentElement.classList.remove("loading");
           });
-
           var y = window.scrollY || document.documentElement.scrollTop || 0;
           document.documentElement.dataset._scrollY = String(y);
           document.documentElement.classList.toggle("at-top", y <= 8);
@@ -226,12 +233,9 @@
             Found a broken link, want to add past papers, or have a suggestion?
           </p>
 
-          <div class="card" style="padding:12px; margin:12px 0;">
-            <p style="margin:0 0 6px;"><strong>Email</strong></p>
-            <a href="mailto:zachapp.team@gmail.com?subject=Student%20Hub%20Suggestion%20or%20Report" id="contactEmail">
-              zachapp.team@gmail.com
-            </a>
-            <button class="btn" type="button" id="copyEmail" style="margin-left:10px;">Copy</button>
+          <div class="card" style="padding:12px; margin:12px 0; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <p style="margin:0; color:var(--muted); font-size:0.9rem;">Click to copy email address</p>
+            <button class="btn primary" type="button" id="copyEmail">Copy email</button>
           </div>
 
           <p class="muted" style="margin:12px 0 0; text-align:center;">

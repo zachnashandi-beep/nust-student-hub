@@ -4,6 +4,13 @@
     <script>
       (function () {
         try {
+          // Apply saved theme IMMEDIATELY before first paint — prevents flash
+          var t = localStorage.getItem("theme");
+          if (t) {
+            document.documentElement.setAttribute("data-theme", t);
+          } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+            document.documentElement.setAttribute("data-theme", "light");
+          }
           document.documentElement.classList.add("loading");
           window.addEventListener("load", function () { document.documentElement.classList.remove("loading"); });
           var y = window.scrollY || document.documentElement.scrollTop || 0;
