@@ -2104,6 +2104,19 @@ dialog.modal.is-closing::backdrop { opacity: 0; }
 .theme-btn .icon-svg {
   vertical-align: middle;
   pointer-events: none;
+  transition: transform 0.0s; /* default: instant */
+}
+
+/* Flip class added by JS during theme switch */
+.theme-btn.is-flipping .icon-svg {
+  animation: iconFlip 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes iconFlip {
+  0%   { transform: rotateY(0deg) scale(1); }
+  40%  { transform: rotateY(90deg) scale(0.8); }
+  41%  { transform: rotateY(-90deg) scale(0.8); }
+  100% { transform: rotateY(0deg) scale(1); }
 }
 
 /* Tip shuffle button icon */
@@ -2193,4 +2206,52 @@ body::before {
 
 @media (prefers-reduced-motion: reduce) {
   body::before { animation: none; }
+}
+
+
+/* ============================================================
+   AUTH MODAL — polished input fields
+   ============================================================ */
+
+.auth-field {
+  margin: 14px 0;
+}
+
+.auth-label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.auth-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  color: var(--text);
+  font-size: 0.97rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  -webkit-appearance: none;
+}
+
+.auth-input::placeholder {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.auth-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.auth-error {
+  margin: 10px 0 4px;
+  font-size: 0.875rem;
+  color: #ff6b6b;
+  font-weight: 500;
 }

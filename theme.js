@@ -31,7 +31,14 @@
     b.innerHTML = current === "dark" ? MOON_SVG : SUN_SVG;
     b.addEventListener("click", () => {
       const current = root.getAttribute("data-theme") || "dark";
-      setTheme(current === "dark" ? "light" : "dark");
+      // Flip animation — add class, switch theme at the midpoint (icon hidden), remove class
+      b.classList.add("is-flipping");
+      setTimeout(() => {
+        setTheme(current === "dark" ? "light" : "dark");
+      }, 160); // switch at midpoint of 380ms flip (40% = ~152ms)
+      setTimeout(() => {
+        b.classList.remove("is-flipping");
+      }, 400);
     });
   });
 })();

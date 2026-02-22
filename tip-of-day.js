@@ -1,9 +1,8 @@
 /**
  * tip-of-day.js
- * Shows a rotating study tip in the hero card.
- * - Daily tip: deterministic based on day of year (same tip all day)
- * - Shuffle button: cycles through tips without repeating until all seen
- * - Tip index stored in sessionStorage so shuffle persists within a tab session
+ * True "tip of the day" — one tip per calendar day, deterministic.
+ * No shuffle button. Tip resets at midnight local time automatically.
+ * Day index = dayOfYear % tips.length, so each day reliably shows a different tip.
  */
 
 const TIPS = window.TIPS = [
@@ -12,7 +11,7 @@ const TIPS = window.TIPS = [
   { text: "Do past papers under timed conditions at least once before every test. They show you the pattern, not just the content.", tag: "Exam prep" },
   { text: "30 minutes of focused practice every day beats a 5-hour panic session the night before a test.", tag: "Consistency" },
   { text: "When you get a programming error, read the error message before searching online. It usually tells you exactly what went wrong.", tag: "Debugging" },
-  { text: "Feeling lost in week 1–3 is normal. Everyone struggles in math and programming moments. Focus on your own progress.", tag: "Mindset" },
+  { text: "Feeling lost in week 1–3 is normal. Everyone struggles at first. Focus on your own progress, not others'.", tag: "Mindset" },
   { text: "After watching a tutorial, pause and do 3–5 practice problems immediately. Otherwise you've just watched someone else learn.", tag: "YouTube" },
   { text: "For MCI: do daily drills, even just 15 minutes. Boolean algebra and logic gates are pattern recognition — volume builds speed.", tag: "MCI" },
   { text: "Start assignments within 48 hours of receiving them. Even just reading the brief and writing the first function.", tag: "Assignments" },
@@ -35,30 +34,37 @@ const TIPS = window.TIPS = [
   { text: "Write out your working even for questions you think are easy. It helps you catch errors and is often required for marks.", tag: "Exam technique" },
   { text: "Reorganising notes, re-reading slides, and watching videos feel productive but are largely passive. Practice is the subject.", tag: "Study method" },
   { text: "For programming: start with tiny tasks — input/output, then conditions, then loops, then functions. Don't skip levels.", tag: "Programming" },
-  { text: "If you recognize 3 or more of your habits as bad ones — that's fine. Pick one to fix this week. Not all ten.", tag: "Mindset" },
+  { text: "If you recognise 3 or more of your habits as bad ones — that's fine. Pick one to fix this week. Not all ten.", tag: "Mindset" },
   { text: "Minimum daily effort compounds faster than you think. Even 45 minutes a day will outperform weekend-only study over a semester.", tag: "Consistency" },
+  { text: "Create a 'mistake log' — every time you get something wrong in practice, write it down. Review it 24 hours before any test.", tag: "Exam prep" },
+  { text: "Your campus library has past exam papers. Collecting them early is one of the highest-leverage things you can do in semester 1.", tag: "Strategy" },
+  { text: "If you can write a function from memory without referencing anything, you know it. If you need to look it up every time, you don't.", tag: "Programming" },
+  { text: "Group study only works if everyone comes prepared. If you're teaching the whole group every session, study alone and teach once.", tag: "Study method" },
+  { text: "Email your lecturer when you're stuck — not the night before, but a week before. Most will respond and appreciate the initiative.", tag: "Mindset" },
 ];
 
-const SESSION_KEY = "tip_shuffle_index";
-const DAY_TIP_KEY = "tip_day_index";
-
-function getDayOfYear() {
+/**
+ * Returns how many milliseconds until local midnight.
+ * Used to schedule the automatic daily tip refresh.
+ */
+function msUntilMidnight() {
   const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  return Math.floor((now - start) / 86400000);
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0);
+  return midnight - now;
 }
 
+/**
+ * Returns today's tip index — same value all day, changes at midnight.
+ * Uses full calendar date string (YYYY-MM-DD) as the key so it's
+ * guaranteed to rotate at local midnight regardless of tab lifetime.
+ */
 function getDailyIndex() {
-  return getDayOfYear() % TIPS.length;
-}
-
-function getShuffleIndex() {
-  const stored = sessionStorage.getItem(SESSION_KEY);
-  return stored !== null ? parseInt(stored, 10) : getDailyIndex();
-}
-
-function setShuffleIndex(i) {
-  sessionStorage.setItem(SESSION_KEY, String(i));
+  const today = new Date().toLocaleDateString("en-CA"); // "YYYY-MM-DD"
+  // Simple deterministic hash: sum char codes → mod tips length
+  let hash = 0;
+  for (let i = 0; i < today.length; i++) hash = (hash * 31 + today.charCodeAt(i)) >>> 0;
+  return hash % TIPS.length;
 }
 
 function renderTip(index) {
@@ -67,7 +73,6 @@ function renderTip(index) {
   const metaEl = document.getElementById("tipMeta");
   if (!textEl || !metaEl) return;
 
-  // Fade out
   textEl.classList.add("tip-fade-out");
   metaEl.classList.add("tip-fade-out");
 
@@ -86,20 +91,16 @@ function renderTip(index) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  const shuffleBtn = document.getElementById("tipShuffle");
-  if (!shuffleBtn) return;
+  const index = getDailyIndex();
+  renderTip(index);
 
-  let currentIndex = getShuffleIndex();
-  renderTip(currentIndex);
-
-  shuffleBtn.addEventListener("click", () => {
-    // Advance to next tip, wrap around
-    currentIndex = (currentIndex + 1) % TIPS.length;
-    setShuffleIndex(currentIndex);
-    renderTip(currentIndex);
-
-    // Spin animation on button
-    shuffleBtn.classList.add("tip-spin");
-    setTimeout(() => shuffleBtn.classList.remove("tip-spin"), 400);
-  });
+  // Schedule auto-refresh at midnight so a long-open tab gets tomorrow's tip
+  function scheduleNextDay() {
+    const ms = msUntilMidnight();
+    setTimeout(() => {
+      renderTip(getDailyIndex());
+      scheduleNextDay(); // reschedule for the following midnight
+    }, ms + 500); // +500ms buffer past midnight
+  }
+  scheduleNextDay();
 });

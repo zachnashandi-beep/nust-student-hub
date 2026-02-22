@@ -153,45 +153,45 @@
       <div class="modal-inner">
         <div class="modal-top">
           <div>
-            <p class="modal-date">Verification</p>
+            <p class="modal-date">Personal access</p>
             <h3 class="modal-title">Verify Profile</h3>
           </div>
           <button class="modal-close" type="button" id="authClose" aria-label="Close">✕</button>
         </div>
 
         <p class="modal-body">
-          Enter your username and access key to access personalized content.
+          Enter your username and access key to unlock your personalised content.
         </p>
 
-        <div style="margin:12px 0;">
-          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+        <div class="auth-field">
+          <label class="auth-label" for="authUsername">Username</label>
           <input
             type="text"
             id="authUsername"
-            placeholder="username"
+            class="auth-input"
+            placeholder="your username"
             autocomplete="username"
-            style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
           />
         </div>
 
-        <div style="margin:12px 0;">
-          <label style="display:block; margin-bottom:6px; font-weight:600;">Access Key</label>
+        <div class="auth-field">
+          <label class="auth-label" for="authAccessKey">Access Key</label>
           <div class="input-with-toggle">
             <input
               type="password"
               id="authAccessKey"
-              placeholder="access key"
+              class="auth-input"
+              placeholder="your access key"
               autocomplete="current-password"
-              style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); outline:none;"
             />
             <button type="button" id="authTogglePassword" class="input-toggle-btn" aria-label="Show access key">Show</button>
           </div>
         </div>
 
-        <p id="authError" class="muted" style="margin:8px 0; color:#ff6b6b; display:none;"></p>
+        <p id="authError" class="auth-error" style="display:none;"></p>
 
         <div class="modal-actions">
-          <button class="btn primary" type="button" id="authSubmit">Verify</button>
+          <button class="btn primary" type="button" id="authSubmit">Verify →</button>
         </div>
       </div>
     </dialog>
