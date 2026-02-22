@@ -636,10 +636,13 @@ dialog.modal.is-closing::backdrop { opacity: 0; }
     overflow-y: auto;
     border-radius: 24px 24px 0 0;
     border-bottom: none;
+    border-left: none;
+    border-right: none;
     margin: 0;
+    /* Safe area for notch phones */
+    padding-bottom: env(safe-area-inset-bottom);
     transform: translateY(100%);
     opacity: 1;
-    /* No backdrop-filter on mobile — causes flicker during swipe */
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: var(--bg2);
@@ -662,7 +665,11 @@ dialog.modal.is-closing::backdrop { opacity: 0; }
     height: 4px;
     border-radius: 2px;
     background: color-mix(in srgb, var(--text) 20%, transparent);
-    margin: 0 auto 14px;
+    margin: 0 auto 16px;
+  }
+  /* Give modal inner a bit of breathing room on sides */
+  .modal-inner {
+    padding: 16px 20px 24px;
   }
 }
 
