@@ -48,7 +48,12 @@
       btn.setAttribute("aria-expanded", "true");
       btn.setAttribute("aria-label", "Close navigation");
       backdrop.classList.add("nav-backdrop--visible");
-      // No body overflow lock — lets back-to-top scroll detection work on iOS
+      // Lock body scroll while menu is open — prevents 30fps swipe-behind jank
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+      // Hide back-to-top button while menu is open
+      const btt = document.getElementById("backToTop");
+      if (btt) btt.style.visibility = "hidden";
     }
 
     function close() {
@@ -56,6 +61,12 @@
       btn.setAttribute("aria-expanded", "false");
       btn.setAttribute("aria-label", "Open navigation");
       backdrop.classList.remove("nav-backdrop--visible");
+      // Restore scroll
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      // Restore back-to-top
+      const btt = document.getElementById("backToTop");
+      if (btt) btt.style.visibility = "";
     }
 
     function toggle() {
