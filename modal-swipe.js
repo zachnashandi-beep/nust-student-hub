@@ -1,74 +1,107 @@
 /**
  * modal-swipe.js
- * Adds iOS-style swipe-down-to-dismiss to all dialog.modal elements.
- * Works on mobile only. Drag handle at top gives visual affordance.
- * Closes the modal if user drags down > 120px or releases with velocity > 0.4px/ms.
+ * - Locks body scroll when any dialog.modal is open (no swipe-through)
+ * - iOS bottom sheet swipe-to-dismiss: drags the whole dialog element
+ * - Fixes flicker: uses transform on dialog, not inner content
  */
 (function () {
-  const CLOSE_THRESHOLD = 120;   // px down to auto-close
-  const VELOCITY_THRESHOLD = 0.4; // px/ms — fast flick closes even if < threshold
+  const CLOSE_THRESHOLD = 140;    // px drag to trigger close
+  const VELOCITY_THRESHOLD = 0.5; // px/ms fast flick
+
+  // ── Scroll lock ──────────────────────────────────────────────────────────
+  let scrollY = 0;
+
+  function lockScroll() {
+    scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+  }
+
+  function unlockScroll() {
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    document.body.style.overflow = "";
+    window.scrollTo(0, scrollY);
+  }
+
+  // ── Swipe-to-dismiss ─────────────────────────────────────────────────────
+  function closeAnimated(modal) {
+    if (!modal.open) return;
+    modal.classList.add("is-closing");
+    setTimeout(() => {
+      modal.classList.remove("is-closing");
+      modal.close();
+    }, 240);
+  }
 
   function attachSwipe(modal) {
-    const inner = modal.querySelector(".modal-inner");
-    if (!inner) return;
-
-    let startY = 0;
-    let startTime = 0;
-    let currentY = 0;
-    let dragging = false;
+    let startY = 0, startTime = 0, currentY = 0, dragging = false;
 
     function onTouchStart(e) {
-      // Only start drag from near the top of the sheet (drag handle area)
+      // Only initiate from the top drag-handle zone of the sheet
       const touch = e.touches[0];
-      const rect = inner.getBoundingClientRect();
-      const relativeY = touch.clientY - rect.top;
-      if (relativeY > 60) return; // only top 60px is draggable
+      const rect = modal.getBoundingClientRect();
+      const relY = touch.clientY - rect.top;
+      if (relY > 56) return;
 
       startY = touch.clientY;
       startTime = Date.now();
       currentY = 0;
       dragging = true;
-      inner.style.transition = "none";
-      inner.style.willChange = "transform";
+      modal.style.transition = "none";
     }
 
     function onTouchMove(e) {
       if (!dragging) return;
       const dy = e.touches[0].clientY - startY;
-      if (dy < 0) return; // don't allow dragging up
+      if (dy < 0) { modal.style.transform = ""; return; }
       currentY = dy;
-      inner.style.transform = `translateY(${dy}px)`;
+      // Move the whole dialog element down
+      modal.style.transform = `translateY(${dy}px)`;
     }
 
     function onTouchEnd() {
       if (!dragging) return;
       dragging = false;
+      modal.style.transition = "";
 
-      const elapsed = Date.now() - startTime;
-      const velocity = elapsed > 0 ? currentY / elapsed : 0;
-
-      inner.style.transition = "";
-      inner.style.willChange = "";
-      inner.style.transform = "";
+      const velocity = Date.now() - startTime > 0
+        ? currentY / (Date.now() - startTime) : 0;
 
       if (currentY > CLOSE_THRESHOLD || velocity > VELOCITY_THRESHOLD) {
-        // Trigger the animated close
-        if (!modal.open) return;
-        modal.classList.add("is-closing");
-        setTimeout(() => {
-          modal.classList.remove("is-closing");
-          modal.close();
-        }, 240);
+        modal.style.transform = "";
+        closeAnimated(modal);
+      } else {
+        // Snap back smoothly
+        modal.style.transition = "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)";
+        modal.style.transform = "translateY(0)";
+        setTimeout(() => { modal.style.transition = ""; }, 300);
       }
     }
 
-    inner.addEventListener("touchstart", onTouchStart, { passive: true });
-    inner.addEventListener("touchmove", onTouchMove, { passive: true });
-    inner.addEventListener("touchend", onTouchEnd, { passive: true });
+    modal.addEventListener("touchstart", onTouchStart, { passive: true });
+    modal.addEventListener("touchmove", onTouchMove, { passive: true });
+    modal.addEventListener("touchend", onTouchEnd, { passive: true });
   }
 
+  // ── Wire up all modals ───────────────────────────────────────────────────
   function init() {
-    document.querySelectorAll("dialog.modal").forEach(attachSwipe);
+    document.querySelectorAll("dialog.modal").forEach((modal) => {
+      attachSwipe(modal);
+
+      // Lock/unlock scroll with modal open state
+      const observer = new MutationObserver(() => {
+        if (modal.open) lockScroll();
+        else unlockScroll();
+      });
+      observer.observe(modal, { attributes: true, attributeFilter: ["open"] });
+
+      // Also catch close via Escape or cancel
+      modal.addEventListener("close", unlockScroll);
+    });
   }
 
   if (document.readyState === "loading") {
