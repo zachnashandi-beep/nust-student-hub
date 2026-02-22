@@ -31,7 +31,6 @@ html {
   overflow-y: visible;
   background: var(--bg);
   background-color: var(--bg);
-  overscroll-behavior: none;
   /* Remove smooth scroll from html — handled per-element to avoid mobile jank */
 }
 
@@ -43,9 +42,6 @@ body {
   overflow-y: auto;
   background: var(--bg);
   background-color: var(--bg);
-  overscroll-behavior-y: none;
-  /* Hint to browser: promote to its own layer for smoother compositing */
-  -webkit-overflow-scrolling: touch;
 }
 
 ::view-transition-old(root),
