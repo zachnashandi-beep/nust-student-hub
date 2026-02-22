@@ -2115,3 +2115,82 @@ dialog.modal.is-closing::backdrop { opacity: 0; }
 #backToTop .icon-svg {
   pointer-events: none;
 }
+
+
+/* ============================================================
+   CURSOR GLOW — desktop hover light effect on cards
+   ============================================================ */
+
+@media (hover: hover) {
+  .guide-card,
+  .tile,
+  .card,
+  .dropdown,
+  .note {
+    --glow-x: 50%;
+    --glow-y: 50%;
+    --glow-opacity: 0;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .guide-card::after,
+  .tile::after,
+  .card::after,
+  .dropdown::after,
+  .note::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: var(--glow-opacity);
+    transition: opacity 0.35s ease;
+    background: radial-gradient(
+      280px circle at var(--glow-x) var(--glow-y),
+      color-mix(in srgb, var(--accent) 9%, transparent),
+      transparent 70%
+    );
+    z-index: 0;
+  }
+
+  /* Make sure card content sits above the glow */
+  .guide-card > *,
+  .tile > *,
+  .card > *,
+  .dropdown > *,
+  .note > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+
+/* ============================================================
+   ANIMATED MESH BACKGROUND — subtle drifting aurora
+   ============================================================ */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, color-mix(in srgb, var(--accent) 3%, transparent), transparent 70%);
+  animation: meshDrift 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes meshDrift {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(2%, 1.5%) scale(1.03); }
+  66%  { transform: translate(-1.5%, 2%) scale(0.98); }
+  100% { transform: translate(1%, -1%) scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}

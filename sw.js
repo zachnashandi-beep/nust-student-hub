@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = "student-hub-v14"; // <-- bump this on every deployment
+const CACHE_NAME = "student-hub-v15"; // <-- bump this on every deployment
 
 const ASSETS = [
   "./",
@@ -38,6 +38,8 @@ const ASSETS = [
   "./back-to-top.js",
   "./sw-register.js",
   "./modal-swipe.js",
+  "./scroll-reveal.js",
+  "./cursor-glow.js",
 ];
 
 self.addEventListener("install", (event) => {
